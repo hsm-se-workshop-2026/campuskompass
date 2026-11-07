@@ -3,24 +3,24 @@ marp: true
 theme: default
 paginate: true
 header: "SE-Projekt Team A"
-footer: "GPX-Visualizer und CampusKompass"
+footer: "CampusKompass"
 ---
 
 # Softwareprojekt
 
-## GPX-Visualizer und CampusKompass
+## CampusKompass
 
 Vereinfachte Code- und Anforderungspräsentation
 
 ---
 
-## Präsentationsstruktur
+## Agenda
 
 1. Ziel und Funktionen
-2. Architektur
-3. Modellierung
-4. Bedienung und Weboberfläche
-5. Tests und Erweiterbarkeit
+2. User Stories und Use Cases
+3. MoSCoW-Analyse
+4. Architektur
+5. Bedienung und Weboberfläche
 
 ---
 
@@ -95,7 +95,56 @@ GeoPoint -> Route -> Statistikberechnung
 
 ---
 
-## 2. Architektur
+## 2. User Stories und Use Cases
+
+### User Stories
+
+- **CAMPUS-01:** Studienplan für ein Datum anzeigen
+- **CAMPUS-02:** Passenden Mensaplan anzeigen
+- **CAMPUS-03:** Wetter am Campus anzeigen
+- **CAMPUS-04:** Route zum Campus planen
+- **CAMPUS-05:** Fahrplan für Datum und Uhrzeit öffnen
+- **CAMPUS-06:** Auswahl auf die aktuelle Zeit setzen
+
+### Use Cases: CampusKompass
+
+| ID | Use Case | Hauptakteur |
+|---|---|---|
+| UC-01 | Dashboard öffnen | Student/in |
+| UC-02 | Studienplan für ein Datum anzeigen | Student/in |
+| UC-03 | Mensaplan laden | Student/in |
+| UC-04 | Wetterdaten anzeigen | Student/in |
+| UC-05 | Route zum Campus planen | Student/in |
+| UC-06 | Fahrplan für Datum und Uhrzeit öffnen | Student/in |
+| UC-07 | Auswahl auf aktuelle Zeit setzen | Student/in |
+
+Die Use Cases beschreiben Vorbedingungen, Alternativfälle, externe Dienste und
+die erwarteten Ergebnisse. User Stories und Use Cases sind über ihre IDs
+rückverfolgbar; die vollständigen Spezifikationen stehen in
+[`requirements/userstories-moscow.md`](../requirements/userstories-moscow.md)
+und [`requirements/usecases.md`](../requirements/usecases.md).
+
+---
+
+## 3. MoSCoW-Analyse
+
+Die MoSCoW-Methode priorisiert Anforderungen nach ihrer Bedeutung für das MVP:
+
+- **Must have:** unverzichtbar für die erste Version
+- **Should have:** wichtig, aber verschiebbar
+- **Could have:** nützliche Erweiterung
+- **Won't have:** in dieser Version bewusst ausgeschlossen
+
+| Priorität | Beispiele |
+|---|---|
+| Must have | GPX importieren und 2D anzeigen; Studienplan für ein Datum |
+| Should have | Höhenprofil und Karten-Overlay; Mensaplan und Wetter |
+| Could have | Interaktive 3D-Ansicht; Campusroute und Fahrplanauskunft |
+| Won't have | Mehrere GPX-Dateien gleichzeitig vergleichen |
+
+---
+
+## 4. Architektur
 
 ### Systemarchitektur
 
@@ -128,7 +177,7 @@ direkt wegen CORS ansprechen muss.
 
 ---
 
-## 3. Modellierung: Klassendiagramm Backend
+### 4.1 Modellierung: Klassendiagramm Backend
 
 Das Backend besteht aus dem Modul `server.py` und dem spezialisierten Handler
 `DashboardHandler`:
@@ -150,7 +199,7 @@ Quelle: [`modellierung/klassendiagramm_backend.puml`](../modellierung/klassendia
 
 ---
 
-## Modellierung: Klassendiagramm Frontend
+### 4.2 Modellierung: Klassendiagramm Frontend
 
 Das JavaScript in `index.html` ist prozedural organisiert. Für die Modellierung
 wird es als `CampusDashboard` mit seinen Zuständigkeiten dargestellt:
@@ -171,7 +220,7 @@ Quelle: [`modellierung/klassendiagramm_frontend.puml`](../modellierung/klassendi
 
 ---
 
-## Modellierung: Paketdiagramm
+### 4.3 Modellierung: Paketdiagramm
 
 ```text
 CampusKompass
@@ -193,7 +242,7 @@ Quelle: [`modellierung/paketdiagramm.puml`](../modellierung/paketdiagramm.puml)
 
 ---
 
-## 4. Bedienung und Weboberfläche
+## 5. Bedienung und Weboberfläche
 
 ### Bedienablauf
 
@@ -219,7 +268,7 @@ und Ergebnisanzeigen.
 
 ---
 
-## 5. Tests und Erweiterbarkeit
+### Tests und Erweiterbarkeit
 
 ### Durchgeführte Prüfungen
 
@@ -250,98 +299,6 @@ aktuellen Antwortstruktur. Das Testkonzept ist in
 
 Die Trennung von Daten, Campuszuordnung, Oberfläche und Proxy reduziert dabei
 die Auswirkungen zukünftiger Änderungen.
-
----
-
-## MoSCoW-Methode
-
-- **Must have**: unverzichtbar für das MVP
-- **Should have**: wichtig, aber verschiebbar
-- **Could have**: nützliche Erweiterung
-- **Won't have**: in dieser Version bewusst ausgeschlossen
-
-Die vollständige Liste steht in
-`requirements/userstories-moscow.md`.
-
-Die User Stories sind über IDs mit den Use Cases in
-`requirements/usecases.md` rückverfolgbar.
-
----
-
-## Priorisierte GPX-User-Stories
-
-### Must have
-
-- GPX-Datei importieren
-- Route in 2D anzeigen
-- Strecke, Dauer, Höhenmeter und Geschwindigkeit anzeigen
-
-### Should have
-
-- Höhenprofil anzeigen
-- Karten-Overlay anzeigen
-- Position über Slider verfolgen
-
-### Could have
-
-- Interaktive 3D-Ansicht
-
-### Won't have (in dieser Version)
-
-- Mehrere GPX-Dateien gleichzeitig vergleichen
-
----
-
-## Priorisierte CampusKompass-Stories
-
-### Must have
-
-- Studienplan für ein Datum anzeigen
-
-### Should have
-
-- Passenden Mensaplan anzeigen
-- Wetter am Campus anzeigen
-
-### Could have
-
-- Route zum Campus planen
-- Fahrplanauskunft für Datum und Uhrzeit öffnen
-- Dashboard-Auswahl auf „Jetzt“ setzen
-
----
-
-## Use Cases: CampusKompass
-
-| ID | Use Case | Hauptakteur |
-|---|---|---|
-| UC-01 | Dashboard öffnen | Student/in |
-| UC-02 | Studienplan für ein Datum anzeigen | Student/in |
-| UC-03 | Mensaplan laden | Student/in |
-| UC-04 | Wetterdaten anzeigen | Student/in |
-| UC-05 | Route zum Campus planen | Student/in |
-| UC-06 | Fahrplan für Datum und Uhrzeit öffnen | Student/in |
-| UC-07 | Auswahl auf aktuelle Zeit setzen | Student/in |
-
-Die Use Cases beschreiben zusätzlich Vorbedingungen, Alternativfälle,
-externe Dienste und die erwarteten Ergebnisse. Die vollständige Spezifikation
-steht in [`requirements/usecases.md`](../requirements/usecases.md).
-
----
-
-## Rückverfolgbarkeit der Anforderungen
-
-```text
-User Story CAMPUS-01 -> UC-02 -> study-plan.json
-User Story CAMPUS-02 -> UC-03 -> server.py -> Studierendenwerk
-User Story CAMPUS-03 -> UC-04 -> Open-Meteo
-User Story CAMPUS-04 -> UC-05 -> Google Maps
-User Story CAMPUS-05 -> UC-06 -> VMT
-User Story CAMPUS-06 -> UC-07 -> Datums-/Zeitsteuerung
-```
-
-Die Anforderungen, Use Cases und Modellierungsdiagramme bilden damit eine
-durchgängige Dokumentationskette vom Nutzerziel bis zur technischen Struktur.
 
 ---
 

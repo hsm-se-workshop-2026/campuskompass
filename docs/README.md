@@ -261,6 +261,6 @@ Die Präsentation liegt als Marp-kompatible Markdown-Datei in
 der Marp-Erweiterung als Folienansicht oder PDF geöffnet werden.
 
 Die Präsentation behandelt verbindlich die fünf Themen **Ziel und Funktionen**,
-**Architektur**, **Modellierung**, **Bedienung und Weboberfläche** sowie
-**Tests und Erweiterbarkeit**. Das zugehörige Testkonzept steht in
+**User Stories und Use Cases**, **MoSCoW-Analyse**, **Architektur** sowie
+**Bedienung und Weboberfläche**. Das zugehörige Testkonzept steht in
 [`testkonzept.md`](./testkonzept.md).
