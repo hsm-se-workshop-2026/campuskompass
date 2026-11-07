@@ -95,6 +95,71 @@ direkt wegen CORS ansprechen muss.
 
 ---
 
+## Modellierung: Klassendiagramm Backend
+
+Das Backend besteht aus dem Modul `server.py` und dem spezialisierten Handler
+`DashboardHandler`:
+
+```text
+server.py
+  +-- main()
+  +-- ThreadingHTTPServer
+          +-- DashboardHandler
+                  +-- do_GET()
+                  +-- /api/mensa -> Studierendenwerk Thüringen
+```
+
+`DashboardHandler` erweitert `SimpleHTTPRequestHandler`. Dadurch werden
+statische Dateien ausgeliefert; der zusätzliche API-Pfad validiert Datum und
+Mensa-ID und leitet die Anfrage als POST weiter.
+
+Quelle: [`modellierung/klassendiagramm_backend.puml`](../modellierung/klassendiagramm_backend.puml)
+
+---
+
+## Modellierung: Klassendiagramm Frontend
+
+Das JavaScript in `index.html` ist prozedural organisiert. Für die Modellierung
+wird es als `CampusDashboard` mit seinen Zuständigkeiten dargestellt:
+
+```text
+CampusDashboard
+  +-- StudySession[] aus study-plan.json
+  +-- loadStudyPlan() / renderStudyPlan()
+  +-- loadMenu() -> Meal[]
+  +-- loadWeather() -> WeatherData
+  +-- showRoute() -> RouteDestination
+```
+
+Die Funktionen wählen anhand des Datums Mensa, Wetterstandort und Routenziel
+aus und aktualisieren anschließend die Oberfläche.
+
+Quelle: [`modellierung/klassendiagramm_frontend.puml`](../modellierung/klassendiagramm_frontend.puml)
+
+---
+
+## Modellierung: Paketdiagramm
+
+```text
+CampusKompass
+  +-- Frontend: index.html
+  +-- Backend: server.py
+  +-- Daten: study-plan.json, assets/
+
+Frontend -> Backend -> Studierendenwerk Thüringen
+Frontend -> Open-Meteo
+Frontend -> Google Maps
+Frontend -> VMT Fahrplanauskunft
+```
+
+Die Paketgrenzen machen sichtbar, dass nur der Mensa-Aufruf über das Backend
+läuft. Wetter, Karten, Fahrplan und Studienplandaten werden vom Frontend
+verarbeitet.
+
+Quelle: [`modellierung/paketdiagramm.puml`](../modellierung/paketdiagramm.puml)
+
+---
+
 ## MoSCoW-Methode
 
 - **Must have**: unverzichtbar für das MVP
@@ -103,7 +168,10 @@ direkt wegen CORS ansprechen muss.
 - **Won't have**: in dieser Version bewusst ausgeschlossen
 
 Die vollständige Liste steht in
-`docs/userstories-moscow.md`.
+`requirements/userstories-moscow.md`.
+
+Die User Stories sind über IDs mit den Use Cases in
+`requirements/usecases.md` rückverfolgbar.
 
 ---
 
@@ -145,6 +213,42 @@ Die vollständige Liste steht in
 ### Could have
 
 - Route zum Campus planen
+- Fahrplanauskunft für Datum und Uhrzeit öffnen
+- Dashboard-Auswahl auf „Jetzt“ setzen
+
+---
+
+## Use Cases: CampusKompass
+
+| ID | Use Case | Hauptakteur |
+|---|---|---|
+| UC-01 | Dashboard öffnen | Student/in |
+| UC-02 | Studienplan für ein Datum anzeigen | Student/in |
+| UC-03 | Mensaplan laden | Student/in |
+| UC-04 | Wetterdaten anzeigen | Student/in |
+| UC-05 | Route zum Campus planen | Student/in |
+| UC-06 | Fahrplan für Datum und Uhrzeit öffnen | Student/in |
+| UC-07 | Auswahl auf aktuelle Zeit setzen | Student/in |
+
+Die Use Cases beschreiben zusätzlich Vorbedingungen, Alternativfälle,
+externe Dienste und die erwarteten Ergebnisse. Die vollständige Spezifikation
+steht in [`requirements/usecases.md`](../requirements/usecases.md).
+
+---
+
+## Rückverfolgbarkeit der Anforderungen
+
+```text
+User Story CAMPUS-01 -> UC-02 -> study-plan.json
+User Story CAMPUS-02 -> UC-03 -> server.py -> Studierendenwerk
+User Story CAMPUS-03 -> UC-04 -> Open-Meteo
+User Story CAMPUS-04 -> UC-05 -> Google Maps
+User Story CAMPUS-05 -> UC-06 -> VMT
+User Story CAMPUS-06 -> UC-07 -> Datums-/Zeitsteuerung
+```
+
+Die Anforderungen, Use Cases und Modellierungsdiagramme bilden damit eine
+durchgängige Dokumentationskette vom Nutzerziel bis zur technischen Struktur.
 
 ---
 

@@ -1,0 +1,42 @@
+@startuml
+title Paketdiagramm CampusKompass
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+package "CampusKompass" {
+  package "Frontend" {
+    [index.html\nHTML, CSS, JavaScript] as Frontend
+  }
+
+  package "Backend" {
+    [server.py\nDashboardHandler] as Backend
+  }
+
+  package "Daten" {
+    database "study-plan.json" as StudyPlan
+    folder "assets/\nLogos" as Assets
+  }
+}
+
+package "Externe Dienste" {
+  cloud "Studierendenwerk Thüringen" as Mensa
+  cloud "Open-Meteo" as Weather
+  cloud "Google Maps" as Maps
+  cloud "VMT Fahrplanauskunft" as VMT
+}
+
+Frontend --> StudyPlan : liest
+Frontend --> Assets : zeigt
+Frontend --> Backend : statische Dateien\nund /api/mensa
+Backend --> Mensa : Proxy-POST
+Frontend --> Weather : Wetterdaten
+Frontend --> Maps : Routenkarte
+Frontend --> VMT : Fahrplan-Widget
+
+note bottom of Backend
+  Der Backend-Proxy kapselt den
+  Mensa-Aufruf und vermeidet CORS-
+  Probleme im Browser.
+end note
+@enduml
