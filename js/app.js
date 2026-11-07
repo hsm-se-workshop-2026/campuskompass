@@ -183,8 +183,10 @@
         const requestId = ++weatherRequestId;
         const selectedDate = getSelectedDate();
         const selectedTime = document.querySelector("#selected-time").value;
-        if (!selectedDate || !selectedTime) return;
+        if (!selectedDate) return;
         const campusContext = getCampusContext(studyPlanSessions, selectedDate);
+        updateWebcam(campusContext.webcam);
+        if (!selectedTime) return;
         const weatherLocation = campusContext.weather;
 
         refresh.disabled = true;
@@ -492,21 +494,29 @@
       document.querySelector("#menu-refresh").addEventListener("click", loadMenu);
       const webcamImage = document.querySelector("#webcam-image");
       const webcamStatus = document.querySelector("#webcam-status");
+      const webcamSource = document.querySelector("#webcam-source");
+      let activeWebcam = getCampusContext(studyPlanSessions, getSelectedDate()).webcam;
       const refreshWebcam = () => {
-        const imageUrl = new URL("https://webcam.antenne-schmalkalden.de/Grasberg.jpg");
+        const imageUrl = new URL(activeWebcam.imageUrl);
         imageUrl.searchParams.set("refresh", Date.now().toString());
         webcamStatus.textContent = "Webcam-Bild wird aktualisiert …";
         webcamImage.src = imageUrl.toString();
       };
+      const updateWebcam = (webcam) => {
+        activeWebcam = webcam;
+        webcamImage.alt = webcam.alt;
+        webcamSource.href = webcam.sourceUrl;
+        webcamSource.textContent = webcam.sourceLabel;
+        refreshWebcam();
+      };
       document.querySelector("#webcam-refresh").addEventListener("click", refreshWebcam);
       webcamImage.addEventListener("load", () => {
-        webcamStatus.textContent = "Bild geladen · automatische Aktualisierung jede Minute";
+        webcamStatus.textContent = `Webcam aus ${activeWebcam.name} geladen · automatische Aktualisierung jede Minute`;
       });
       webcamImage.addEventListener("error", () => {
         webcamStatus.textContent = "Webcam-Bild gerade nicht erreichbar";
       });
       window.setInterval(refreshWebcam, 60000);
-      refreshWebcam();
 
       const selectedDateInput = document.querySelector("#selected-date");
       const selectedTimeInput = document.querySelector("#selected-time");

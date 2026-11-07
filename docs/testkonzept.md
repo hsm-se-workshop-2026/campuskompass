@@ -21,15 +21,16 @@ fachliche manuelle Prüfungen und Abhängigkeiten zu externen APIs.
 
 1. Ein Datum ohne Termin zeigt den Hinweis „keine Vorlesung oder Klausur“.
 2. Ein Gera-Termin setzt Mensa, Wetter, Route und Fahrplanziel auf Gera.
-3. Ein Schmalkalden-Termin setzt die entsprechenden Schmalkalden-Daten.
-4. Ein Schmalkalden-Termin lädt Mensadaten aus dem Snapshot für Ressourcen-ID 73.
-5. Ein Gera-Termin lädt Mensadaten aus dem Snapshot für Ressourcen-ID 67.
-6. Ein schneller Datumswechsel zeigt keine verspäteten alten Mensa- oder
+3. Ein Gera-Termin zeigt den aktuellen Webcam-Snapshot von Gera; ein Schmalkalden-Termin zeigt die Webcam vom Grasberg.
+4. Ein Schmalkalden-Termin setzt die entsprechenden Schmalkalden-Daten.
+5. Ein Schmalkalden-Termin lädt Mensadaten aus dem Snapshot für Ressourcen-ID 73.
+6. Ein Gera-Termin lädt Mensadaten aus dem Snapshot für Ressourcen-ID 67.
+7. Ein schneller Datumswechsel zeigt keine verspäteten alten Mensa- oder
    Wetterdaten an.
-7. „Jetzt“ setzt Datum und Uhrzeit auf die Zeitzone Europe/Berlin.
-8. Ein leerer Startpunkt verhindert das Öffnen einer Route.
-9. Eine verweigerte Standortfreigabe zeigt eine verständliche Meldung.
-10. Ein nicht erreichbarer externer Dienst zeigt einen sichtbaren Fehlerstatus.
+8. „Jetzt“ setzt Datum und Uhrzeit auf die Zeitzone Europe/Berlin.
+9. Ein leerer Startpunkt verhindert das Öffnen einer Route.
+10. Eine verweigerte Standortfreigabe zeigt eine verständliche Meldung.
+11. Ein nicht erreichbarer externer Dienst zeigt einen sichtbaren Fehlerstatus.
 
 ## Grenzen
 

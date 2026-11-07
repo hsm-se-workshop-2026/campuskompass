@@ -1,4 +1,4 @@
-// Zentrale Zuordnung der Termine zu Campus, Mensa, Wetterdaten und Routenziel.
+// Zentrale Zuordnung der Termine zu Campus, Mensa, Wetter, Webcam und Routenziel.
 const campus = {
   latitude: 50.72,
   longitude: 10.45,
@@ -15,6 +15,13 @@ const campuses = {
     weather: {
       latitude: campus.latitude,
       longitude: campus.longitude,
+    },
+    webcam: {
+      name: "Schmalkalden",
+      imageUrl: "https://webcam.antenne-schmalkalden.de/Grasberg.jpg",
+      alt: "Aktuelles Webcam-Bild vom Grasberg in Schmalkalden",
+      sourceUrl: "https://webcam.antenne-schmalkalden.de/Grasberg.jpg",
+      sourceLabel: "Grasberg · Quelle ↗",
     },
     mensa: {
       resourceId: "73",
@@ -34,6 +41,13 @@ const campuses = {
     weather: {
       latitude: 50.8775,
       longitude: 12.0823,
+    },
+    webcam: {
+      name: "Gera",
+      imageUrl: "https://webcam-gera.de/cam.php",
+      alt: "Aktuelles Webcam-Bild aus Gera",
+      sourceUrl: "https://webcam-gera.de/",
+      sourceLabel: "Gera · Quelle ↗",
     },
     mensa: {
       resourceId: "67",
