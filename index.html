@@ -225,6 +225,27 @@
       .stat strong { display: block; margin-top: 7px; font-size: 14px; }
       .data-note { margin: 0 24px 18px; color: var(--muted); font-size: 11px; }
 
+      .webcam-content { padding: 0 24px 18px; }
+      .webcam-image {
+        display: block;
+        width: min(100%, 360px);
+        aspect-ratio: 4 / 3;
+        margin: 0 auto;
+        border-radius: 10px;
+        background: var(--brand-soft);
+        object-fit: cover;
+      }
+      .webcam-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .webcam-footer a { color: var(--brand); font-weight: 700; text-decoration: none; }
+      .webcam-footer a:hover { text-decoration: underline; }
+
       .status { color: var(--muted); font-size: 12px; }
       .status.error { color: var(--brand-dark); }
       .loading { padding: 4px 0; color: var(--muted); font-size: 13px; }
@@ -271,6 +292,7 @@
       .train-footer a { color: var(--brand); font-weight: 700; text-decoration: none; }
       .train-footer a:hover { text-decoration: underline; }
       .study-card { grid-column: 1 / -1; }
+      .study-downloads { display: flex; align-items: center; gap: 14px; }
       .study-content { padding: 0 24px 22px; }
       .study-note { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
       .card-heading > a.status { text-decoration: none; }
@@ -375,6 +397,7 @@
         .card-heading:has(.menu-refresh) { align-items: flex-start; }
         .card-heading { padding-right: 18px; padding-left: 18px; }
         .menu-content, .route-controls { padding-right: 18px; padding-left: 18px; }
+        .webcam-content { padding-right: 18px; padding-left: 18px; }
         .day-planner { gap: 10px; padding: 16px; }
         .planner-field { flex: 1; min-width: 130px; }
         .train-info, .train-footer { padding-right: 18px; padding-left: 18px; }
@@ -475,13 +498,39 @@
           </div>
         </section>
 
+        <section class="card webcam-card" aria-labelledby="webcam-title">
+          <div class="card-heading">
+            <div>
+              <h2 id="webcam-title">Schmalkalden live</h2>
+              <p>Webcam Grasberg · aktualisiert jede Minute</p>
+            </div>
+            <button class="button secondary" id="webcam-refresh" type="button">↻&nbsp; Aktualisieren</button>
+          </div>
+          <div class="webcam-content">
+            <img
+              class="webcam-image"
+              id="webcam-image"
+              src="https://webcam.antenne-schmalkalden.de/Grasberg.jpg"
+              alt="Aktuelles Webcam-Bild vom Grasberg in Schmalkalden"
+              width="1024"
+              height="768">
+            <div class="webcam-footer">
+              <span id="webcam-status" aria-live="polite">Webcam-Bild wird geladen …</span>
+              <a href="https://webcam.antenne-schmalkalden.de/Grasberg.jpg" target="_blank" rel="noreferrer">Quelle ↗</a>
+            </div>
+          </div>
+        </section>
+
         <section class="card study-card" aria-labelledby="study-title">
           <div class="card-heading">
             <div>
               <h2 id="study-title">Dein Studienplan für den Tag</h2>
               <p>Lehrveranstaltungen aus dem Studienablaufplan Elektrotechnik und Management</p>
             </div>
-            <a class="status" href="./Studienablaufplanung_ELT2526_050926.pdf" target="_blank" rel="noreferrer">PDF öffnen ↗</a>
+            <div class="study-downloads">
+              <a class="status" href="./studienablaufplan.ics" download="studienablaufplan.ics">Kalender herunterladen ↓</a>
+              <a class="status" href="./Studienablaufplanung_ELT2526_050926.pdf" target="_blank" rel="noreferrer">PDF öffnen ↗</a>
+            </div>
           </div>
           <div class="study-content">
             <p class="study-note">Ausgewähltes Datum: <strong id="study-plan-date"></strong></p>
@@ -1036,6 +1085,24 @@
 
       document.querySelector("#weather-refresh").addEventListener("click", loadWeather);
       document.querySelector("#menu-refresh").addEventListener("click", loadMenu);
+      const webcamImage = document.querySelector("#webcam-image");
+      const webcamStatus = document.querySelector("#webcam-status");
+      const refreshWebcam = () => {
+        const imageUrl = new URL("https://webcam.antenne-schmalkalden.de/Grasberg.jpg");
+        imageUrl.searchParams.set("refresh", Date.now().toString());
+        webcamStatus.textContent = "Webcam-Bild wird aktualisiert …";
+        webcamImage.src = imageUrl.toString();
+      };
+      document.querySelector("#webcam-refresh").addEventListener("click", refreshWebcam);
+      webcamImage.addEventListener("load", () => {
+        webcamStatus.textContent = "Bild geladen · automatische Aktualisierung jede Minute";
+      });
+      webcamImage.addEventListener("error", () => {
+        webcamStatus.textContent = "Webcam-Bild gerade nicht erreichbar";
+      });
+      window.setInterval(refreshWebcam, 60000);
+      refreshWebcam();
+
       const selectedDateInput = document.querySelector("#selected-date");
       const selectedTimeInput = document.querySelector("#selected-time");
       const selectedDateTimeFormatter = new Intl.DateTimeFormat("sv-SE", {

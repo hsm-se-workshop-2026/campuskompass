@@ -14,6 +14,8 @@ Die Google-Maps-Route im Abschnitt „Dein Weg zum Campus“ richtet ihr Ziel na
 dem Studienplan: Bei Gera-Terminen führt sie zur DHGE Gera, sonst zur Hochschule
 Schmalkalden. Mit „Jetzt“ stellst du Datum und Uhrzeit auf die aktuelle Zeit in
 Deutschland zurück und aktualisierst die Tagesansichten.
+Die Webcam Grasberg in Schmalkalden wird als kompaktes Livebild angezeigt und
+jede Minute direkt von Antenne Schmalkalden neu geladen.
 
 1. Öffne ein Terminal im Ordner `Dashboard`.
 2. Starte den Dashboard-Server:
@@ -30,6 +32,19 @@ den benötigten `/api/mensa`-Endpunkt nicht bereit.
 Falls Port 8000 bereits belegt ist, kann der Server beispielsweise mit
 `PORT=8001 python3 server.py` gestartet werden; dann `http://127.0.0.1:8001/`
 öffnen.
+
+## Kalenderdatei
+
+`studienablaufplan.ics` enthält alle Termine aus `study-plan.json` und kann in
+iOS-Kalender oder Outlook importiert werden. Die Datei kann über „Kalender
+herunterladen“ im Studienplan-Bereich des Dashboards heruntergeladen werden.
+Zum Aktualisieren nach Änderungen am Studienplan im Projektordner
+`python3 export_calendar.py` ausführen.
+
+Für iOS die `.ics`-Datei auf das iPhone übertragen (zum Beispiel über AirDrop,
+Mail oder iCloud Drive), in „Dateien“ öffnen und alle Termine zum Kalender
+hinzufügen. In Outlook im Kalender „Kalender hinzufügen“ und „Aus Datei
+hochladen“ wählen, dann die `.ics`-Datei auswählen.
 
 ## Studienablaufplan
 
