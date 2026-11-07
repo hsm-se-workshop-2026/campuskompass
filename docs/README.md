@@ -21,9 +21,10 @@ Im Kopfbereich werden die Logos der Hochschule Schmalkalden und der Dualen
 Hochschule Gera-Eisenach angezeigt. Die offiziellen Bilddateien liegen lokal
 im Ordner `assets`.
 
-Der Mensa-Speiseplan wird über einen lokalen Python-Endpunkt geladen, damit
-der Browser die Anfrage des Studierendenwerks nicht wegen CORS blockiert.
-Python 3 ist bereits ausreichend; zusätzliche Pakete werden nicht benötigt.
+Die Mensa-Speisepläne werden direkt aus der OpenMensa-API geladen. Die Website
+ist statisch und benötigt für den Betrieb keinen Backend-Server. Je nach
+Studienort werden Mensa Blechhammer in Schmalkalden (OpenMensa-ID 843) oder
+Mensa Weg der Freundschaft in Gera (OpenMensa-ID 152) angezeigt.
 Die Datumsauswahl im Dashboard lädt den Speiseplan für den gewählten Tag und
 übernimmt Datum und Abfahrtszeit in das VMT-Fahrplan-Widget. Das Ziel wird
 passend zum Studienort gesetzt; in Schmalkalden ist es „Schmalkalden,
@@ -34,7 +35,7 @@ Hochschule Schmalkalden. Mit „Jetzt“ stellst du Datum und Uhrzeit auf die
 aktuelle Zeit in Deutschland zurück und aktualisierst die Tagesansichten.
 
 1. Öffne ein Terminal im Projektordner `campuskompass`.
-2. Starte den Dashboard-Server:
+2. Starte den lokalen Vorschau-Server:
 
    ```powershell
    python .\server.py
@@ -43,11 +44,22 @@ aktuelle Zeit in Deutschland zurück und aktualisierst die Tagesansichten.
 3. Öffne im Browser <http://127.0.0.1:8000/>.
 4. Zum Beenden im Terminal `Ctrl+C` drücken.
 
-Nicht `python -m http.server` verwenden: Der eingebaute statische Server stellt
-den benötigten `/api/mensa`-Endpunkt nicht bereit.
 Falls Port 8000 bereits belegt ist, kann der Server beispielsweise mit
 `$env:PORT = "8001"` gestartet werden; dann
 <http://127.0.0.1:8001/> öffnen.
+
+### Veröffentlichung mit GitHub Pages
+
+1. Lade den gesamten Projektordner in ein GitHub-Repository hoch.
+2. Öffne im Repository **Settings → Pages**.
+3. Wähle **Deploy from a branch**, den Branch `main` und den Ordner
+   `/ (root)`.
+4. Öffne die nach dem Deployment angezeigte GitHub-Pages-Adresse.
+
+Die relativen Verweise auf CSS, JavaScript, Bilder, Studienplandaten, PDF und
+Kalender funktionieren auch in einem GitHub-Pages-Unterpfad. Wetter- und
+Mensa-Daten werden vom Browser direkt über HTTPS von Open-Meteo bzw. OpenMensa
+geladen. Bei externen Diensten ist eine Internetverbindung erforderlich.
 
 ### Studienablaufplan
 
@@ -61,9 +73,9 @@ Klausurtermine anhand der zentralen Datumsauswahl. Angezeigt werden Uhrzeit,
 Veranstaltung, Lehrende/r, Ort und Raum. Die PDF liegt ebenfalls im
 Projektordner und kann über „PDF öffnen“ eingesehen werden.
 
-Der Mensaplan passt den Standort an die Vorlesung im Studienplan an. Für
-Veranstaltungen in Gera wird „Mensa Weg der Freundschaft“ (Studierendenwerk-ID
-67) geladen; für Schmalkalden wird „Mensa Blechhammer“ (ID 73) verwendet.
+Die angezeigte Mensa richtet sich nach dem Studienort des gewählten Datums.
+Für Veranstaltungen in Gera wird „Mensa Weg der Freundschaft“ (OpenMensa-ID
+152), für Schmalkalden „Mensa Blechhammer“ (OpenMensa-ID 843) geladen.
 Auch die Wetterabfrage nutzt für Gera-Termine Gera als Standort, ansonsten
 Schmalkalden. Open-Meteo stellt Vorhersagen nur bis zu 16 Tage im Voraus
 bereit; für den 10.–13. Dezember 2026 wird der Gera-Standort verwendet,
@@ -89,13 +101,13 @@ offiziellen Plan müssen in dieser JSON-Datei nachgetragen werden.
 1. Die Nutzerin oder der Nutzer wählt ein Datum.
 2. Das JavaScript sucht passende Termine in `study-plan.json`.
 3. Aus dem Studienort werden Mensa, Wetterstandort und Routenziel bestimmt.
-4. Der Mensaplan wird über `/api/mensa` geladen.
+4. Der Mensaplan wird direkt von der OpenMensa-API geladen.
 5. Wetterdaten werden von Open-Meteo geladen.
 6. Die Route wird als Google-Maps-Wegbeschreibung angezeigt.
 
-Der Python-Server stellt die statischen Dateien bereit und fungiert beim
-Mensaplan als Proxy. Dadurch wird der externe Mensa-Endpunkt vom Browser aus
-nicht direkt wegen CORS angesprochen.
+Der Python-Server dient nur der lokalen Vorschau. GitHub Pages stellt die
+gleichen statischen Dateien bereit; für den Mensa-Aufruf ist kein Proxy
+erforderlich.
 
 ### Fehlerbehandlung und parallele Anfragen
 
@@ -128,19 +140,13 @@ $env:PORT = "8001"
 python .\server.py
 ```
 
-### Mensa-Endpunkt
+### Mensa-Daten
 
-Der Server akzeptiert:
-
-```text
-/api/mensa?date=JJJJ-MM-TT&resource_id=67
-/api/mensa?date=JJJJ-MM-TT&resource_id=73
-```
-
-Die Ressourcen-ID `67` steht für die Mensa in Gera, `73` für die Mensa
-Blechhammer in Schmalkalden. Ungültige IDs oder Datumswerte werden mit einem
-HTTP-Fehler beantwortet. Fehler beim externen Studierendenwerk werden als
-`502 Bad Gateway` gemeldet.
+Mensa Blechhammer (ID 843) und Mensa Weg der Freundschaft (ID 152) werden
+über `https://openmensa.org/api/v2/canteens/{id}/days/{date}/meals`
+abgefragt. OpenMensa liefert Gerichte als JSON mit Kategorie, Hinweisen und
+verfügbaren Preisen. Ein HTTP-404 oder eine leere Liste bedeutet, dass für den
+gewählten Tag dort kein Speiseplan verfügbar ist.
 
 ### Prüfung nach Änderungen
 
@@ -165,7 +171,7 @@ docs/                Projektdokumentation und PlantUML
 modellierung/        UML-Entwürfe
 requirements/        Anforderungen und User Stories
 css/, js/            Oberfläche und Campuslogik
-server.py            lokaler Webserver und Mensa-Proxy
+server.py            lokaler Vorschau-Webserver
 index.html           Dashboard-Oberfläche
 ```
 
@@ -179,7 +185,7 @@ Die detaillierten Modelle liegen im Ordner
 [`modellierung`](../modellierung/):
 
 - [`klassendiagramm_backend.puml`](../modellierung/klassendiagramm_backend.puml)
-  beschreibt `DashboardHandler` und den HTTP-Server.
+  beschreibt den optionalen lokalen Vorschau-Server.
 - [`klassendiagramm_frontend.puml`](../modellierung/klassendiagramm_frontend.puml)
   beschreibt die JavaScript-Zuständigkeiten und die verwendeten Datenobjekte.
 - [`paketdiagramm.puml`](../modellierung/paketdiagramm.puml) zeigt die

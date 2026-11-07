@@ -37,7 +37,7 @@ und ordnet die Daten dem ausgewählten Datum zu.
 
 - Studienplan nach Datum filtern und Termine mit Zeit, Veranstaltung,
   Lehrkraft, Ort und Raum anzeigen
-- Mensaplan des passenden Campus über den lokalen Server laden
+- Mensaplan des passenden Campus direkt über OpenMensa laden
 - Wetter für Campus, Datum und Uhrzeit anzeigen
 - Campusabhängiges Ziel für Route und ÖPNV-Fahrplanauskunft setzen
 - Google-Maps-Route aus Startort oder Browserstandort öffnen
@@ -50,7 +50,7 @@ und ordnet die Daten dem ausgewählten Datum zu.
 - Lokales Webdashboard für Studierende
 - Studienplan, Mensaplan, Wetter und Campusroute in einer Oberfläche
 - Frontend mit HTML, CSS und JavaScript
-- Python-Server für statische Dateien und den Mensa-Proxy
+- Statische Website, direkt über GitHub Pages veröffentlichbar
 
 ---
 
@@ -114,11 +114,10 @@ Browser
   |       +--> study-plan.json
   |       +--> Open-Meteo
   |       +--> Google Maps
-  |       +--> /api/mensa
+  |       +--> OpenMensa API
   |
   +--> server.py
-          +--> statische Dateien
-          +--> Proxy zum Studierendenwerk Thüringen
+          +--> lokale Vorschau statischer Dateien
 ```
 
 ---
@@ -131,28 +130,26 @@ Browser
 4. Mensaplan und Wetter werden geladen.
 5. Die Campusroute wird als Wegbeschreibung angezeigt.
 
-Der Proxy in `server.py` verhindert, dass der Browser den Mensa-Endpunkt
-direkt wegen CORS ansprechen muss.
+Das Dashboard fragt die OpenMensa-API direkt aus dem Browser ab. Für
+Schmalkalden ist die Mensa Blechhammer (ID 843), für Gera die Mensa Weg der
+Freundschaft (ID 152) hinterlegt. Der Python-Server wird nur für die lokale
+Vorschau benötigt, nicht für das Hosting auf GitHub Pages.
 
 ---
 
-### 4.1 Modellierung: Klassendiagramm Backend
+### 4.1 Lokale Vorschau
 
-Das Backend besteht aus dem Modul `server.py` und dem spezialisierten Handler
-`DashboardHandler`:
+`server.py` stellt das Projektverzeichnis lokal als statische Website bereit:
 
 ```text
 server.py
   +-- main()
   +-- ThreadingHTTPServer
           +-- DashboardHandler
-                  +-- do_GET()
-                  +-- /api/mensa -> Studierendenwerk Thüringen
 ```
 
-`DashboardHandler` erweitert `SimpleHTTPRequestHandler`. Dadurch werden
-statische Dateien ausgeliefert; der zusätzliche API-Pfad validiert Datum und
-Mensa-ID und leitet die Anfrage als POST weiter.
+`DashboardHandler` erweitert `SimpleHTTPRequestHandler`; der Server führt
+keine API- oder Proxy-Aufgaben aus.
 
 Quelle: [`modellierung/klassendiagramm_backend.puml`](../modellierung/klassendiagramm_backend.puml)
 
@@ -184,18 +181,16 @@ Quelle: [`modellierung/klassendiagramm_frontend.puml`](../modellierung/klassendi
 ```text
 CampusKompass
   +-- Frontend: index.html
-  +-- Backend: server.py
   +-- Daten: study-plan.json, assets/
 
-Frontend -> Backend -> Studierendenwerk Thüringen
+Frontend -> OpenMensa API
 Frontend -> Open-Meteo
 Frontend -> Google Maps
 Frontend -> VMT Fahrplanauskunft
 ```
 
-Die Paketgrenzen machen sichtbar, dass nur der Mensa-Aufruf über das Backend
-läuft. Wetter, Karten, Fahrplan und Studienplandaten werden vom Frontend
-verarbeitet.
+Das Frontend lädt Mensa- und Wetterdaten direkt von ihren APIs. Studienplan,
+Logos und weitere Dateien werden statisch bereitgestellt.
 
 Quelle: [`modellierung/paketdiagramm.puml`](../modellierung/paketdiagramm.puml)
 
@@ -211,6 +206,9 @@ Quelle: [`modellierung/paketdiagramm.puml`](../modellierung/paketdiagramm.puml)
 4. Im Fahrplan-Widget Startort und das angezeigte Campusziel verwenden.
 5. Für eine Autofahrt Startpunkt eingeben oder den Standort freigeben.
 6. Mit „Jetzt“ jederzeit zur aktuellen Zeit zurückkehren.
+
+Für die öffentliche Veröffentlichung wird der Projektordner in ein GitHub-
+Repository hochgeladen und unter **Settings → Pages** als Website aktiviert.
 
 ### Oberfläche
 
@@ -250,13 +248,14 @@ aktuellen Antwortstruktur. Das Testkonzept ist in
 - Neue Termine werden ausschließlich in `study-plan.json` gepflegt.
 - Weitere Datenquellen können als eigene Lade- und Renderfunktionen ergänzt
   werden.
-- Der Mensa-Proxy kann um zusätzliche, whitelisted Ressourcen erweitert werden.
+- Weitere OpenMensa-Standorte können durch Hinterlegen ihrer OpenMensa-ID in
+  `js/campus-context.js` ergänzt werden.
 - Die Frontend-Funktionen können später in klar getrennte Module oder
   Komponenten überführt werden.
 - Automatisierte Browser- und API-Tests können auf dem vorhandenen Testkonzept
   aufbauen.
 
-Die Trennung von Daten, Campuszuordnung, Oberfläche und Proxy reduziert dabei
+Die Trennung von Daten, Campuszuordnung und Oberfläche reduziert dabei
 die Auswirkungen zukünftiger Änderungen.
 
 ---

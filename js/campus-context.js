@@ -17,7 +17,7 @@ const campuses = {
       longitude: campus.longitude,
     },
     mensa: {
-      resourceId: "73",
+      openMensaId: 843,
       name: "Mensa Blechhammer",
     },
     transit: {
@@ -35,7 +35,7 @@ const campuses = {
       longitude: 12.0823,
     },
     mensa: {
-      resourceId: "67",
+      openMensaId: 152,
       name: "Mensa Weg der Freundschaft",
     },
     transit: {

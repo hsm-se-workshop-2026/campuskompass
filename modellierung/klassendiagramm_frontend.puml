@@ -32,15 +32,14 @@ class StudySession <<study-plan.json>> {
 
 class Mensa {
   +name: string
-  +resourceId: string
+  +openMensaId: number | null
 }
 
-class Meal {
+class Meal <<OpenMensa API>> {
   +name: string
-  +price: string
-  +allergens: string
-  +additives: string
-  +symbols: string[]
+  +category: string
+  +notes: string[]
+  +prices: object
 }
 
 class WeatherData <<Open-Meteo>> {
@@ -56,7 +55,7 @@ class RouteDestination <<Google Maps>> {
 
 CampusDashboard "1" o-- "*" StudySession : lädt und filtert
 CampusDashboard ..> Mensa : ermittelt für Datum
-CampusDashboard ..> Meal : erzeugt aus HTML
+CampusDashboard ..> Meal : lädt als JSON
 CampusDashboard ..> WeatherData : lädt und rendert
 CampusDashboard ..> RouteDestination : ermittelt
 

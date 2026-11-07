@@ -1,10 +1,10 @@
       import { getCampusContext } from "./campus-context.js";
 
-      const menuSource = "/api/mensa";
-      const mealSymbols = {
-        "V*": "Vegan",
-        V: "Vegetarisch",
-        mr: "mensaRegional",
+      const openMensaBaseUrl = "https://openmensa.org/api/v2";
+      const mealNoteLabels = {
+        vegan: "Vegan",
+        vegetarian: "Vegetarisch",
+        "ovo-lacto-vegetabil": "Vegetarisch",
       };
       // Zähler verhindern, dass verspätete Antworten einen neueren Stand
       // (z. B. nach einem schnellen Datumswechsel) wieder überschreiben.
@@ -13,6 +13,23 @@
       let studyPlanSessions = [];
       let studyPlanLoadError = null;
       let lastRouteOrigin = "";
+
+      function formatMealPrices(prices) {
+        const priceLabels = {
+          students: "Studierende",
+          employees: "Bedienstete",
+          pupils: "Schüler/innen",
+          others: "Gäste",
+        };
+        const formatCurrency = new Intl.NumberFormat("de-DE", {
+          style: "currency",
+          currency: "EUR",
+        });
+        return Object.entries(priceLabels)
+          .filter(([key]) => Number.isFinite(prices?.[key]))
+          .map(([key, label]) => `${label}: ${formatCurrency.format(prices[key])}`)
+          .join(" · ");
+      }
 
       const weatherDescriptions = {
         0: ["Klarer Himmel", "☀️"],
@@ -292,8 +309,13 @@
         const requestId = ++menuRequestId;
         const selectedDate = getSelectedDate();
         const mensa = getCampusContext(studyPlanSessions, selectedDate).mensa;
+        const sourceLink = document.querySelector("#menu-source");
         updateMenuDate(selectedDate);
         document.querySelector("#menu-title").textContent = mensa.name;
+        sourceLink.hidden = !mensa.openMensaId;
+        if (mensa.openMensaId) {
+          sourceLink.href = `https://openmensa.org/c/${mensa.openMensaId}`;
+        }
         status.classList.remove("error");
         status.textContent = `${mensa.name} · Speiseplan wird geladen …`;
         refresh.disabled = true;
@@ -302,32 +324,58 @@
           textContent: "Gerichte werden geladen …",
         }));
 
+        if (!mensa.openMensaId) {
+          list.replaceChildren(Object.assign(document.createElement("div"), {
+            className: "menu-empty",
+            textContent: "Für diese Mensa ist derzeit kein Eintrag in OpenMensa hinterlegt.",
+          }));
+          status.textContent = `${mensa.name} · nicht bei OpenMensa verfügbar`;
+          status.classList.add("error");
+          refresh.disabled = false;
+          return;
+        }
+
         try {
-          const query = new URLSearchParams({ date: selectedDate, resource_id: mensa.resourceId });
-          const response = await fetch(`${menuSource}?${query}`);
+          const response = await fetch(
+            `${openMensaBaseUrl}/canteens/${mensa.openMensaId}/days/${selectedDate}/meals`,
+          );
+          if (requestId !== menuRequestId) return;
+          if (response.status === 404) {
+            list.replaceChildren(Object.assign(document.createElement("div"), {
+              className: "menu-empty",
+              textContent: "Für diesen Tag ist bei OpenMensa kein Speiseplan verfügbar.",
+            }));
+            status.textContent = `${mensa.name} · kein Speiseplan für diesen Tag`;
+            return;
+          }
           if (!response.ok) throw new Error(`Speiseplan antwortet mit HTTP ${response.status}`);
 
-          const html = await response.text();
+          const menuData = await response.json();
           if (requestId !== menuRequestId) return;
-          const menuDocument = new DOMParser().parseFromString(html, "text/html");
-          const rows = [...menuDocument.querySelectorAll(".rowMeal")];
-          const meals = rows.flatMap((row) => {
-            const name = row.querySelector(".mealText")?.textContent.trim();
-            if (!name) return [];
-            return [{
-              name,
-              price: row.querySelector(".mealPreise")?.textContent.trim() ?? "",
-              allergens: row.querySelector(".allergene")?.textContent.trim() ?? "",
-              additives: row.querySelector(".zusatzstoffe")?.textContent.trim() ?? "",
-              symbols: (row.querySelector(".meal-symbols")?.textContent ?? "")
-                .split(",")
-                .map((symbol) => symbol.trim())
-                .filter((symbol) => mealSymbols[symbol]),
-            }];
+          if (!Array.isArray(menuData)) {
+            throw new Error("OpenMensa hat ein unerwartetes Datenformat geliefert.");
+          }
+          const meals = menuData.map((meal) => {
+            if (!meal || typeof meal.name !== "string" || !meal.name.trim()) {
+              throw new Error("Ein Gericht enthält keinen gültigen Namen.");
+            }
+            return {
+              name: meal.name.trim(),
+              price: formatMealPrices(meal.prices),
+              category: typeof meal.category === "string" ? meal.category : "",
+              notes: Array.isArray(meal.notes)
+                ? meal.notes.filter((note) => typeof note === "string")
+                : [],
+            };
           });
 
           if (meals.length === 0) {
-            throw new Error("Für diesen Tag ist im offiziellen Speiseplan kein Angebot eingetragen.");
+            list.replaceChildren(Object.assign(document.createElement("div"), {
+              className: "menu-empty",
+              textContent: "Für diesen Tag ist bei OpenMensa kein Speiseplan verfügbar.",
+            }));
+            status.textContent = `${mensa.name} · kein Speiseplan für diesen Tag`;
+            return;
           }
 
           list.replaceChildren();
@@ -343,24 +391,27 @@
             if (meal.price) {
               const price = document.createElement("p");
               price.className = "meal-price";
-              price.textContent = `Studierende / Bedienstete / Gäste: ${meal.price}`;
+              price.textContent = meal.price;
               article.append(price);
             }
 
-            for (const detail of [meal.allergens, meal.additives].filter(Boolean)) {
+            for (const detail of [meal.category, ...meal.notes].filter(Boolean)) {
               const note = document.createElement("p");
               note.className = "meal-details";
               note.textContent = detail;
               article.append(note);
             }
 
-            if (meal.symbols.length) {
+            const symbols = meal.notes
+              .map((note) => mealNoteLabels[note.toLowerCase()])
+              .filter((label, index, labels) => label && labels.indexOf(label) === index);
+            if (symbols.length) {
               const badges = document.createElement("div");
               badges.className = "meal-badges";
-              for (const symbol of meal.symbols) {
+              for (const symbol of symbols) {
                 const badge = document.createElement("span");
                 badge.className = "meal-badge";
-                badge.textContent = mealSymbols[symbol];
+                badge.textContent = symbol;
                 badges.append(badge);
               }
               article.append(badges);
@@ -369,7 +420,7 @@
             list.append(article);
           }
 
-          status.textContent = `${meals.length} ${meals.length === 1 ? "Gericht" : "Gerichte"} in ${mensa.name} · direkt vom Studierendenwerk Thüringen`;
+          status.textContent = `${meals.length} ${meals.length === 1 ? "Gericht" : "Gerichte"} in ${mensa.name} · direkt von OpenMensa`;
         } catch (error) {
           if (requestId !== menuRequestId) return;
           const message = document.createElement("div");
