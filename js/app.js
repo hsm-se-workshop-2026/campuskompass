@@ -1,10 +1,12 @@
       import { getCampusContext } from "./campus-context.js";
 
       const menuDataSource = "./mensa-data.json";
+      const fuelDataSource = "./fuel-stations.json";
       // Zähler verhindern, dass verspätete Antworten einen neueren Stand
       // (z. B. nach einem schnellen Datumswechsel) wieder überschreiben.
       let weatherRequestId = 0;
       let menuRequestId = 0;
+      let fuelRequestId = 0;
       let studyPlanSessions = [];
       let studyPlanLoadError = null;
       let lastRouteOrigin = "";
@@ -127,7 +129,7 @@
         }
 
         // Erst nach dem Studienplan laden, damit der Campus korrekt ermittelt wird.
-        await Promise.all([loadMenu(), loadWeather()]);
+        await Promise.all([loadMenu(), loadWeather(), loadFuelStations()]);
       }
 
       function updateMenuDate(selectedDate) {
@@ -297,6 +299,160 @@
           timeZone: "Europe/Berlin",
         }).format(new Date(updatedAt));
         return ` · Datenstand ${timestamp} Uhr`;
+      }
+
+      function formatFuelPrice(price) {
+        return Number.isFinite(price)
+          ? new Intl.NumberFormat("de-DE", {
+            style: "currency",
+            currency: "EUR",
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3,
+          }).format(price)
+          : "–";
+      }
+
+      function createFuelPrice(label, price) {
+        const item = document.createElement("div");
+        item.className = "fuel-price";
+        const name = document.createElement("span");
+        name.textContent = label;
+        const value = document.createElement("strong");
+        value.textContent = formatFuelPrice(price);
+        item.append(name, value);
+        return item;
+      }
+
+      function formatFuelTimestamp(timestamp) {
+        return new Intl.DateTimeFormat("de-DE", {
+          day: "2-digit",
+          month: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Europe/Berlin",
+        }).format(new Date(timestamp));
+      }
+
+      async function loadFuelStations() {
+        const status = document.querySelector("#fuel-status");
+        const list = document.querySelector("#fuel-list");
+        const requestId = ++fuelRequestId;
+        const selectedDate = getSelectedDate();
+        const campus = getCampusContext(studyPlanSessions, selectedDate);
+        status.classList.remove("error");
+        status.textContent = `${campus.name} · Tankstellenpreise werden geladen …`;
+        document.querySelector("#fuel-description").textContent =
+          `Die nächstgelegenen Tankstellen zum Campus ${campus.name} · alle Preise je Liter`;
+        list.replaceChildren(Object.assign(document.createElement("p"), {
+          className: "loading",
+          textContent: "Tankstellenpreise werden geladen …",
+        }));
+
+        try {
+          const response = await fetch(fuelDataSource, { cache: "no-store" });
+          if (requestId !== fuelRequestId) return;
+          if (!response.ok) throw new Error(`Tankstellendaten antworten mit HTTP ${response.status}`);
+
+          const snapshot = await response.json();
+          if (requestId !== fuelRequestId) return;
+          if (!snapshot || !snapshot.campuses || !Array.isArray(snapshot.campuses[campus.name])) {
+            throw new Error("Die gespeicherten Tankstellendaten haben ein ungültiges Format.");
+          }
+          const stations = snapshot.campuses[campus.name];
+          if (!snapshot.updatedAt || !Number.isFinite(Date.parse(snapshot.updatedAt))) {
+            throw new Error("Tankstellendaten wurden noch nicht veröffentlicht.");
+          }
+          if (stations.length === 0) {
+            list.replaceChildren(Object.assign(document.createElement("p"), {
+              className: "menu-empty",
+              textContent: `Für ${campus.name} sind noch keine Tankstellendaten verfügbar.`,
+            }));
+            status.textContent = `${campus.name} · keine Tankstellendaten`;
+            status.classList.add("error");
+            return;
+          }
+
+          list.replaceChildren();
+          for (const station of stations) {
+            if (!station || typeof station.id !== "string" || typeof station.name !== "string") {
+              throw new Error("Ein Tankstelleneintrag enthält ungültige Daten.");
+            }
+            const card = document.createElement("article");
+            card.className = "fuel-station";
+
+            const heading = document.createElement("div");
+            heading.className = "fuel-station-heading";
+            const details = document.createElement("div");
+            const name = document.createElement("h3");
+            name.textContent = station.name;
+            details.append(name);
+            if (station.brand) {
+              const brand = document.createElement("p");
+              brand.className = "fuel-station-brand";
+              brand.textContent = station.brand;
+              details.append(brand);
+            }
+            const openStatus = document.createElement("span");
+            openStatus.className = "fuel-open-status";
+            openStatus.textContent = station.isOpen ? "Geöffnet" : "Geschlossen";
+            if (!station.isOpen) openStatus.classList.add("closed");
+            heading.append(details, openStatus);
+
+            const address = document.createElement("p");
+            address.className = "fuel-station-address";
+            address.textContent = [
+              `${station.street ?? ""} ${station.houseNumber ?? ""}`.trim(),
+              [station.postCode, station.place].filter(Boolean).join(" "),
+            ].filter(Boolean).join(", ");
+
+            const prices = document.createElement("div");
+            prices.className = "fuel-prices";
+            prices.append(
+              createFuelPrice("Super E5", station.prices?.e5),
+              createFuelPrice("Super E10", station.prices?.e10),
+              createFuelPrice("Diesel", station.prices?.diesel),
+            );
+
+            const footer = document.createElement("div");
+            footer.className = "fuel-station-footer";
+            const distance = document.createElement("span");
+            distance.textContent = `${Number(station.distanceKm).toLocaleString("de-DE", {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })} km entfernt`;
+            footer.append(distance);
+            if (Number.isFinite(station.latitude) && Number.isFinite(station.longitude)) {
+              const mapLink = document.createElement("a");
+              const mapUrl = new URL("https://www.google.com/maps/search/");
+              mapUrl.searchParams.set("api", "1");
+              mapUrl.searchParams.set("query", `${station.latitude},${station.longitude}`);
+              mapLink.href = mapUrl.toString();
+              mapLink.target = "_blank";
+              mapLink.rel = "noreferrer";
+              mapLink.textContent = "Karte ↗";
+              footer.append(mapLink);
+            }
+
+            card.append(heading, address, prices, footer);
+            list.append(card);
+          }
+
+          const ageMinutes = (Date.now() - Date.parse(snapshot.updatedAt)) / 60000;
+          status.textContent = `${stations.length} Tankstellen · Datenstand ${formatFuelTimestamp(snapshot.updatedAt)} Uhr`;
+          if (ageMinutes > 45) {
+            status.textContent += " · möglicherweise veraltet";
+            status.classList.add("error");
+          }
+        } catch (error) {
+          if (requestId !== fuelRequestId) return;
+          const message = document.createElement("p");
+          message.className = "menu-empty";
+          message.textContent = error.message || "Tankstellendaten konnten nicht geladen werden.";
+          list.replaceChildren(message);
+          status.textContent = `${campus.name} · Tankstellendaten nicht verfügbar`;
+          status.classList.add("error");
+          console.error("Tankstellendaten konnten nicht geladen werden:", error);
+        }
       }
 
       async function loadMenu() {
@@ -545,6 +701,7 @@
         updateTransitDestination();
         loadMenu();
         loadWeather();
+        loadFuelStations();
       };
       const now = new Date();
       selectedDateInput.value = new Intl.DateTimeFormat("sv-SE", {
@@ -570,6 +727,7 @@
         updateTransitDestination();
         loadMenu();
         loadWeather();
+        loadFuelStations();
         renderStudyPlan(selectedDate);
       };
       selectedDateInput.addEventListener("input", handleDateChange);

@@ -2,6 +2,7 @@ name: Refresh menus and publish GitHub Pages
 
 on:
   schedule:
+    - cron: "*/15 * * * *"
     - cron: "11 */6 * * *"
   workflow_dispatch:
   push:
@@ -15,7 +16,7 @@ permissions:
 
 concurrency:
   group: github-pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -33,9 +34,15 @@ jobs:
           python-version: "3.12"
 
       - name: Fetch current canteen menus
+        if: github.event_name != 'schedule' || github.event.schedule == '11 */6 * * *'
         env:
           TZ: Europe/Berlin
         run: python scripts/update_mensa_data.py
+
+      - name: Fetch nearby fuel stations and prices
+        env:
+          TANKERKOENIG_API_KEY: ${{ secrets.TANKERKOENIG_API_KEY }}
+        run: python scripts/update_fuel_stations.py
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -43,7 +50,7 @@ jobs:
       - name: Prepare site files
         run: |
           mkdir dist
-          cp index.html study-plan.json mensa-data.json studienablaufplan.ics Studienablaufplanung_ELT2526_050926.pdf dist/
+          cp index.html study-plan.json mensa-data.json fuel-stations.json studienablaufplan.ics Studienablaufplanung_ELT2526_050926.pdf dist/
           cp -r assets css js dist/
 
       - name: Upload Pages artifact
