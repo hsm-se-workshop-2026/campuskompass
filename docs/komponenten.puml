@@ -1,0 +1,42 @@
+@startuml
+title Vereinfachte Architektur des Projekts
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor "Nutzer/in" as User
+
+package "GPX-Visualizer" {
+  component "src/main.py\nVisualisierung und Interaktion" as GpxMain
+  component "src/model/track.py\nGPX-Modell" as Track
+  component "src/model/analysis.py\nAnalyse (teilweise vorbereitet)" as Analysis
+  database "assets/Wanderung.gpx" as GpxFile
+  component "Matplotlib + Contextily" as Plot
+}
+
+package "CampusKompass" {
+  component "index.html\nHTML, CSS und JavaScript" as Dashboard
+  component "server.py\nstatischer Server + Mensa-Proxy" as Server
+  database "study-plan.json" as StudyPlan
+  folder "campuskompass/assets/\nLogos" as Logos
+}
+
+cloud "Studierendenwerk Thüringen" as Mensa
+cloud "Open-Meteo" as Weather
+cloud "Google Maps" as Maps
+
+User --> GpxMain : startet
+GpxMain --> GpxFile : liest
+GpxMain --> Track : verwendet
+Track --> Analysis : Höhenprofil
+GpxMain --> Plot : zeichnet Karte,\nProfil und 3D-Ansicht
+
+User --> Dashboard : öffnet im Browser
+Dashboard --> Server : lädt Dateien\nund /api/mensa
+Dashboard --> StudyPlan : liest Termine
+Dashboard --> Logos : zeigt Logos
+Server --> Mensa : POST Speiseplan
+Dashboard --> Weather : lädt Wetterdaten
+Dashboard --> Maps : erstellt Wegbeschreibung
+
+@enduml
