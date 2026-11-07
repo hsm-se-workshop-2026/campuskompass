@@ -52,19 +52,17 @@ Fehlermeldung.
 
 **Ziel:** Der Speiseplan der zum Studienort passenden Mensa wird angezeigt.
 
-**Akteure:** Student/in, Browser, CampusKompass-Server,
-Studierendenwerk Thüringen  
+**Akteure:** Student/in, Browser, GitHub Pages
 **Vorbedingung:** Ein Datum ist ausgewählt.
 
 1. Das Frontend ermittelt die Mensa und ihre Ressourcen-ID.
-2. Der Browser fragt `/api/mensa?date=...&resource_id=...` beim Server an.
-3. Der Server validiert Datum und Ressourcen-ID.
-4. Der Server ruft den Speiseplan beim Studierendenwerk ab.
-5. Das Frontend liest Gerichte, Preise, Allergene und Zusatzstoffe aus der
-   Antwort und rendert sie.
+2. Das Frontend lädt den Speiseplan für den ausgewählten Tag aus
+   `mensa-data.json`.
+3. Das Frontend rendert verfügbare Gerichte, Hinweise und Preise.
 
-**Alternativen:** Bei ungültigen Parametern wird HTTP 400, bei einem Fehler des
-externen Dienstes HTTP 502 angezeigt.
+**Alternativen:** Liegt das gewählte Datum außerhalb des abgedeckten 14-Tage-
+Zeitraums oder enthält der Snapshot keine Gerichte, zeigt das Dashboard einen
+entsprechenden Hinweis.
 
 **User Story:** CAMPUS-02
 
@@ -127,4 +125,3 @@ Hinweis angezeigt.
 3. Studienplan, Mensaplan, Wetter, Route und Fahrplan werden aktualisiert.
 
 **User Story:** CAMPUS-06
-

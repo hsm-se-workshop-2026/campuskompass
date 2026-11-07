@@ -33,9 +33,10 @@ class StudySession <<study-plan.json>> {
 class Mensa {
   +name: string
   +resourceId: string
+  +sourceUrl: string
 }
 
-class Meal {
+class Meal <<mensa-data.json>> {
   +name: string
   +price: string
   +allergens: string
@@ -56,7 +57,7 @@ class RouteDestination <<Google Maps>> {
 
 CampusDashboard "1" o-- "*" StudySession : lädt und filtert
 CampusDashboard ..> Mensa : ermittelt für Datum
-CampusDashboard ..> Meal : erzeugt aus HTML
+CampusDashboard ..> Meal : lädt als JSON
 CampusDashboard ..> WeatherData : lädt und rendert
 CampusDashboard ..> RouteDestination : ermittelt
 

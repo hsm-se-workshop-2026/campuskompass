@@ -1,11 +1,6 @@
       import { getCampusContext } from "./campus-context.js";
 
-      const menuSource = "/api/mensa";
-      const mealSymbols = {
-        "V*": "Vegan",
-        V: "Vegetarisch",
-        mr: "mensaRegional",
-      };
+      const menuDataSource = "./mensa-data.json";
       // Zähler verhindern, dass verspätete Antworten einen neueren Stand
       // (z. B. nach einem schnellen Datumswechsel) wieder überschreiben.
       let weatherRequestId = 0;
@@ -285,6 +280,23 @@
         }
       }
 
+      function formatDate(date) {
+        return new Intl.DateTimeFormat("de-DE").format(new Date(`${date}T12:00:00`));
+      }
+
+      function formatMenuUpdate(updatedAt) {
+        if (!updatedAt) return "";
+        const timestamp = new Intl.DateTimeFormat("de-DE", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Europe/Berlin",
+        }).format(new Date(updatedAt));
+        return ` · Datenstand ${timestamp} Uhr`;
+      }
+
       async function loadMenu() {
         const status = document.querySelector("#menu-status");
         const list = document.querySelector("#meal-list");
@@ -292,8 +304,10 @@
         const requestId = ++menuRequestId;
         const selectedDate = getSelectedDate();
         const mensa = getCampusContext(studyPlanSessions, selectedDate).mensa;
+        const sourceLink = document.querySelector("#menu-source");
         updateMenuDate(selectedDate);
         document.querySelector("#menu-title").textContent = mensa.name;
+        sourceLink.href = mensa.sourceUrl;
         status.classList.remove("error");
         status.textContent = `${mensa.name} · Speiseplan wird geladen …`;
         refresh.disabled = true;
@@ -303,35 +317,43 @@
         }));
 
         try {
-          const query = new URLSearchParams({ date: selectedDate, resource_id: mensa.resourceId });
-          const response = await fetch(`${menuSource}?${query}`);
-          if (!response.ok) throw new Error(`Speiseplan antwortet mit HTTP ${response.status}`);
-
-          const html = await response.text();
+          const response = await fetch(menuDataSource, { cache: "no-store" });
           if (requestId !== menuRequestId) return;
-          const menuDocument = new DOMParser().parseFromString(html, "text/html");
-          const rows = [...menuDocument.querySelectorAll(".rowMeal")];
-          const meals = rows.flatMap((row) => {
-            const name = row.querySelector(".mealText")?.textContent.trim();
-            if (!name) return [];
-            return [{
-              name,
-              price: row.querySelector(".mealPreise")?.textContent.trim() ?? "",
-              allergens: row.querySelector(".allergene")?.textContent.trim() ?? "",
-              additives: row.querySelector(".zusatzstoffe")?.textContent.trim() ?? "",
-              symbols: (row.querySelector(".meal-symbols")?.textContent ?? "")
-                .split(",")
-                .map((symbol) => symbol.trim())
-                .filter((symbol) => mealSymbols[symbol]),
-            }];
-          });
+          if (!response.ok) throw new Error(`Speiseplandaten antworten mit HTTP ${response.status}`);
+
+          const menuData = await response.json();
+          if (requestId !== menuRequestId) return;
+          if (!menuData || typeof menuData.menus !== "object" || !menuData.menus) {
+            throw new Error("Die gespeicherten Speiseplandaten haben ein ungültiges Format.");
+          }
+          const inRange = selectedDate >= menuData.rangeStart && selectedDate <= menuData.rangeEnd;
+          if (!inRange) {
+            list.replaceChildren(Object.assign(document.createElement("div"), {
+              className: "menu-empty",
+              textContent: `Automatisch aktualisierte Speisepläne sind für ${formatDate(menuData.rangeStart)} bis ${formatDate(menuData.rangeEnd)} verfügbar.`,
+            }));
+            status.textContent = `${mensa.name} · Datum außerhalb des aktuellen Zeitraums`;
+            return;
+          }
+          const meals = menuData.menus[mensa.resourceId]?.[selectedDate] ?? [];
+          if (!Array.isArray(meals)) {
+            throw new Error("Für dieses Datum sind keine gültigen Speiseplandaten vorhanden.");
+          }
 
           if (meals.length === 0) {
-            throw new Error("Für diesen Tag ist im offiziellen Speiseplan kein Angebot eingetragen.");
+            list.replaceChildren(Object.assign(document.createElement("div"), {
+              className: "menu-empty",
+              textContent: "Für diesen Tag sind in der offiziellen Quelle keine Gerichte eingetragen.",
+            }));
+            status.textContent = `${mensa.name} · kein Speiseplan für diesen Tag${formatMenuUpdate(menuData.updatedAt)}`;
+            return;
           }
 
           list.replaceChildren();
           for (const meal of meals) {
+            if (!meal || typeof meal.name !== "string" || !meal.name.trim()) {
+              throw new Error("Ein Gericht enthält keinen gültigen Namen.");
+            }
             const article = document.createElement("article");
             article.className = "meal-item";
 
@@ -343,7 +365,7 @@
             if (meal.price) {
               const price = document.createElement("p");
               price.className = "meal-price";
-              price.textContent = `Studierende / Bedienstete / Gäste: ${meal.price}`;
+              price.textContent = meal.price;
               article.append(price);
             }
 
@@ -354,13 +376,13 @@
               article.append(note);
             }
 
-            if (meal.symbols.length) {
+            if (Array.isArray(meal.symbols) && meal.symbols.length) {
               const badges = document.createElement("div");
               badges.className = "meal-badges";
               for (const symbol of meal.symbols) {
                 const badge = document.createElement("span");
                 badge.className = "meal-badge";
-                badge.textContent = mealSymbols[symbol];
+                badge.textContent = symbol;
                 badges.append(badge);
               }
               article.append(badges);
@@ -369,7 +391,7 @@
             list.append(article);
           }
 
-          status.textContent = `${meals.length} ${meals.length === 1 ? "Gericht" : "Gerichte"} in ${mensa.name} · direkt vom Studierendenwerk Thüringen`;
+          status.textContent = `${meals.length} ${meals.length === 1 ? "Gericht" : "Gerichte"} in ${mensa.name}${formatMenuUpdate(menuData.updatedAt)}`;
         } catch (error) {
           if (requestId !== menuRequestId) return;
           const message = document.createElement("div");
@@ -382,6 +404,7 @@
         } finally {
           if (requestId === menuRequestId) refresh.disabled = false;
         }
+
       }
 
       function mapsDirections(origin) {

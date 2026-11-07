@@ -24,7 +24,7 @@ Die Priorisierung verwendet die MoSCoW-Methode:
 | Bereich | Stand |
 |---|---|
 | CampusKompass-Studienplan | umgesetzt |
-| CampusKompass-Mensa-Proxy | umgesetzt in `campuskompass/server.py` |
+| CampusKompass-Mensa | umgesetzt über regelmäßige Snapshot-Erzeugung durch GitHub Actions |
 | CampusKompass-Wetter und Route | umgesetzt im JavaScript des Dashboards |
 | CampusKompass-Fahrplan | umgesetzt als VMT-Widget und externer Link |
 | CampusKompass-Use-Cases | dokumentiert in `requirements/usecases.md` |

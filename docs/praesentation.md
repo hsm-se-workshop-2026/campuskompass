@@ -43,11 +43,11 @@ Standorten Schmalkalden und Gera.
 
 ### Kernfunktionen
 
-- Studienplan nach Datum filtern
-- Termine mit Uhrzeit, Veranstaltung, Lehrkraft, Ort und Raum anzeigen
-- passenden Mensaplan laden
-- Wetter für Datum, Uhrzeit und Campus anzeigen
-- Campusziel für Route und ÖPNV-Fahrplan bestimmen
+- Studienplan nach Datum filtern und Termine mit Zeit, Veranstaltung,
+  Lehrkraft, Ort und Raum anzeigen
+- Regelmäßig aktualisierten Mensaplan für beide Mensen anzeigen
+- Wetter für Campus, Datum und Uhrzeit anzeigen
+- Campusabhängiges Ziel für Route und ÖPNV-Fahrplanauskunft setzen
 - Google-Maps-Route aus Startort oder Browserstandort öffnen
 - Auswahl mit „Jetzt“ auf die aktuelle Zeit zurücksetzen
 
@@ -65,15 +65,10 @@ User Stories beschreiben den erwarteten Nutzen aus Sicht der Studierenden.
 Use Cases konkretisieren anschließend den Ablauf, beteiligte Akteure,
 Vorbedingungen, Alternativen und Ergebnisse.
 
-```text
-Nutzerbedarf
-    ↓
-User Story
-    ↓
-Use Case mit Ablauf und Akteuren
-    ↓
-Umsetzung im Code
-```
+- Lokales Webdashboard für Studierende
+- Studienplan, Mensaplan, Wetter und Campusroute in einer Oberfläche
+- Frontend mit HTML, CSS und JavaScript
+- Statische Website, direkt über GitHub Pages veröffentlichbar
 
 ---
 
@@ -164,14 +159,19 @@ ist und wo sie im System umgesetzt wird.
 
 ```text
 Browser
-  ├─ index.html + css/style.css
-  ├─ js/app.js
-  ├─ js/campus-context.js
-  └─ study-plan.json
-          │
-          └── server.py
-                └── /api/mensa
-                      └── Studierendenwerk Thüringen
+  |
+  +--> index.html / JavaScript
+  |       +--> study-plan.json
+  |       +--> mensa-data.json
+  |       +--> Open-Meteo
+  |       +--> Google Maps
+  |
+  +--> server.py
+          +--> lokale Vorschau statischer Dateien
+
+GitHub Actions (alle 6 Stunden)
+  +--> offizieller Speiseplan des Studierendenwerks Thüringen
+  +--> mensa-data.json --> GitHub Pages
 ```
 
 Der Browser übernimmt Darstellung und Interaktion. Der Python-Server liefert
@@ -254,6 +254,21 @@ die modellierte Sicht die Beziehungen verständlich.
 
 ## 4. Architektur
 
+```text
+CampusKompass
+  +-- Frontend: index.html
+  +-- Daten: study-plan.json, assets/
+
+GitHub Actions -> Studierendenwerk Thüringen -> mensa-data.json
+GitHub Pages -> statische Dateien und Speiseplan-Snapshot
+Frontend -> mensa-data.json
+Frontend -> Open-Meteo
+Frontend -> Google Maps
+Frontend -> VMT Fahrplanauskunft
+```
+
+Das Frontend lädt den statischen Mensa-Snapshot und den Studienplan von
+GitHub Pages. Wetterdaten werden direkt von Open-Meteo geladen.
 ### Klassendiagramm Backend mit PlantUML
 
 Quelle: [`modellierung/klassendiagramm_backend.puml`](../modellierung/klassendiagramm_backend.puml)
@@ -309,10 +324,10 @@ zusätzliche Programmlogik.
    geladen; die Mensa läuft über `/api/mensa`.
 5. **Darstellung:** Ergebnisse werden in separaten Dashboard-Karten gerendert.
 
-Fehler bei JSON-Daten, Netzwerkzugriffen oder API-Antworten werden als
-Statusmeldungen in der Oberfläche angezeigt.
+Für die öffentliche Veröffentlichung wird der Projektordner in ein GitHub-
+Repository hochgeladen und unter **Settings → Pages** als Website aktiviert.
 
----
+### Oberfläche
 
 ## 4. Architektur
 
@@ -335,11 +350,14 @@ Fehler werden ausdrücklich als HTTP 400 oder 502 zurückgemeldet.
 
 ### Start und erster Ablauf
 
-1. Server mit `python .\server.py` starten.
-2. `http://127.0.0.1:8000/` im Browser öffnen.
-3. Datum und Abfahrtszeit in der Tagesplanung auswählen.
-4. Studienplan, Mensa und Wetter prüfen.
-5. Route oder Fahrplan für den angezeigten Campus verwenden.
+- Python-Syntaxprüfung mit `python -m py_compile .\server.py`
+- Snapshot-Erzeugung und Prüfung beider Mensa-Datenquellen
+- JavaScript-Syntaxprüfung mit `node --check`
+- JSON-Validierung von `study-plan.json`
+- HTTP-Smoke-Test des lokalen Servers
+- VS-Code-Diagnose ohne gemeldete Fehler oder Warnungen
+- Manuelle Prüfung von Datumswechsel, Campuswechsel, Wetterfehlern und
+  Standortfreigabe
 
 Die zentrale Auswahl aktualisiert alle abhängigen Karten.
 

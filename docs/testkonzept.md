@@ -2,7 +2,7 @@
 
 ## Zweck
 
-Dieses Dokument beschreibt die Prüfungen für das lokale CampusKompass-
+Dieses Dokument beschreibt die Prüfungen für das statische CampusKompass-
 Dashboard. Es unterscheidet technische Prüfungen ohne externe Dienste,
 fachliche manuelle Prüfungen und Abhängigkeiten zu externen APIs.
 
@@ -10,24 +10,26 @@ fachliche manuelle Prüfungen und Abhängigkeiten zu externen APIs.
 
 | Prüfung | Kommando/Aktion | Erwartetes Ergebnis |
 |---|---|---|
-| Python-Syntax | `python -m py_compile .\server.py` | Kein Syntaxfehler |
+| Python-Syntax | `python -m py_compile .\server.py .\scripts\update_mensa_data.py` | Kein Syntaxfehler |
 | JavaScript-Syntax | `node --check .\js\app.js` | Kein Syntaxfehler |
 | JSON-Struktur | `Get-Content .\study-plan.json \| ConvertFrom-Json` | JSON wird erfolgreich gelesen |
+| Mensa-Snapshot | `Get-Content .\mensa-data.json \| ConvertFrom-Json` | Speiseplandaten werden erfolgreich gelesen |
 | Statischer Server | `python .\server.py`, Browser öffnen | Dashboard wird geladen |
-| Ungültige Mensa-ID | `/api/mensa?resource_id=999` aufrufen | HTTP 400 |
-| Ungültiges Datum | `/api/mensa?date=abc&resource_id=73` aufrufen | HTTP 400 |
+| Speiseplan-Update | `python .\scripts\update_mensa_data.py` | Snapshot für beide Mensen und 14 Tage wird erzeugt |
 
 ## Fachliche Prüfungen
 
 1. Ein Datum ohne Termin zeigt den Hinweis „keine Vorlesung oder Klausur“.
 2. Ein Gera-Termin setzt Mensa, Wetter, Route und Fahrplanziel auf Gera.
 3. Ein Schmalkalden-Termin setzt die entsprechenden Schmalkalden-Daten.
-4. Ein schneller Datumswechsel zeigt keine verspäteten alten Mensa- oder
+4. Ein Schmalkalden-Termin lädt Mensadaten aus dem Snapshot für Ressourcen-ID 73.
+5. Ein Gera-Termin lädt Mensadaten aus dem Snapshot für Ressourcen-ID 67.
+6. Ein schneller Datumswechsel zeigt keine verspäteten alten Mensa- oder
    Wetterdaten an.
-5. „Jetzt“ setzt Datum und Uhrzeit auf die Zeitzone Europe/Berlin.
-6. Ein leerer Startpunkt verhindert das Öffnen einer Route.
-7. Eine verweigerte Standortfreigabe zeigt eine verständliche Meldung.
-8. Ein nicht erreichbarer externer Dienst zeigt einen sichtbaren Fehlerstatus.
+7. „Jetzt“ setzt Datum und Uhrzeit auf die Zeitzone Europe/Berlin.
+8. Ein leerer Startpunkt verhindert das Öffnen einer Route.
+9. Eine verweigerte Standortfreigabe zeigt eine verständliche Meldung.
+10. Ein nicht erreichbarer externer Dienst zeigt einen sichtbaren Fehlerstatus.
 
 ## Grenzen
 
