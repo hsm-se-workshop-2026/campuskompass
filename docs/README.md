@@ -193,6 +193,9 @@ Entfernung in `fuel-stations.json`. Die Anfragen sind mindestens 61 Sekunden
 voneinander getrennt, entsprechend dem Tankerkönig-Limit von einer Anfrage
 pro Minute. Das Repository-Secret `TANKERKOENIG_API_KEY` wird nur vom
 GitHub-Workflow verwendet und weder protokolliert noch veröffentlicht.
+Der Knopf „Route auf Karte“ zeigt die Strecke zur gewählten Tankstelle in der
+integrierten Karte an. Als Start gilt der eingetragene Startpunkt; ist keiner
+angegeben, wird der zugehörige Campus verwendet.
 
 ### Prüfung nach Änderungen
 

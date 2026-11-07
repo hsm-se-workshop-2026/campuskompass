@@ -422,15 +422,30 @@
             })} km entfernt`;
             footer.append(distance);
             if (Number.isFinite(station.latitude) && Number.isFinite(station.longitude)) {
+              const stationCoordinates = `${station.latitude},${station.longitude}`;
               const mapLink = document.createElement("a");
               const mapUrl = new URL("https://www.google.com/maps/search/");
               mapUrl.searchParams.set("api", "1");
-              mapUrl.searchParams.set("query", `${station.latitude},${station.longitude}`);
+              mapUrl.searchParams.set("query", stationCoordinates);
               mapLink.href = mapUrl.toString();
               mapLink.target = "_blank";
               mapLink.rel = "noreferrer";
               mapLink.textContent = "Karte ↗";
-              footer.append(mapLink);
+
+              const actions = document.createElement("div");
+              actions.className = "fuel-station-actions";
+              actions.append(mapLink);
+              const routeButton = document.createElement("button");
+              routeButton.className = "fuel-route-button";
+              routeButton.type = "button";
+              routeButton.textContent = "Route auf Karte";
+              routeButton.addEventListener("click", () => showFuelStationRoute(
+                stationCoordinates,
+                station.name,
+                campus,
+              ));
+              actions.append(routeButton);
+              footer.append(actions);
             }
 
             card.append(heading, address, prices, footer);
@@ -577,12 +592,30 @@
 
       function renderEmbeddedRoute(origin) {
         const destination = getCampusContext(studyPlanSessions, getSelectedDate()).route;
+        renderEmbeddedDirections(origin, destination.address);
+      }
+
+      function renderEmbeddedDirections(origin, destination) {
         const embeddedDirections = new URL("https://maps.google.com/maps");
         embeddedDirections.searchParams.set("output", "embed");
         if (origin) embeddedDirections.searchParams.set("saddr", origin);
-        embeddedDirections.searchParams.set("daddr", destination.address);
+        embeddedDirections.searchParams.set("daddr", destination);
         embeddedDirections.searchParams.set("dirflg", "d");
         document.querySelector("#map").src = embeddedDirections.toString();
+      }
+
+      function showFuelStationRoute(destination, stationName, campus) {
+        const enteredOrigin = document.querySelector("#origin").value.trim();
+        const origin = enteredOrigin || `${campus.fuelStations.latitude},${campus.fuelStations.longitude}`;
+        renderEmbeddedDirections(origin, destination);
+        document.querySelector("#route-destination").textContent = stationName;
+        document.querySelector("#route-message").textContent = enteredOrigin
+          ? `Route von „${enteredOrigin}“ zur Tankstelle „${stationName}“ auf der Karte angezeigt.`
+          : `Route vom Campus ${campus.name} zur Tankstelle „${stationName}“ auf der Karte angezeigt.`;
+        document.querySelector("#route-title").scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
       }
 
       function updateRouteDestination() {
@@ -605,6 +638,7 @@
         const directions = mapsDirections(origin);
         const destination = getCampusContext(studyPlanSessions, getSelectedDate()).route;
         lastRouteOrigin = origin;
+        document.querySelector("#route-destination").textContent = destination.label;
         renderEmbeddedRoute(origin);
         document.querySelector("#route-message").textContent =
           `Route von „${origin}“ zur ${destination.label}. Für die Navigation in Google Maps öffnen.`;

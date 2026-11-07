@@ -32,11 +32,14 @@ fachliche manuelle Prüfungen und Abhängigkeiten zu externen APIs.
 8. Ein Gera-Termin zeigt Tankstellen nahe Gera; Schmalkalden-Termine zeigen
    Tankstellen nahe der Hochschule Schmalkalden.
 9. Tankstellenkarten zeigen E5, E10 und Diesel auf drei Nachkommastellen,
-   Öffnungsstatus, Entfernung und Kartenlink.
-10. „Jetzt“ setzt Datum und Uhrzeit auf die Zeitzone Europe/Berlin.
-11. Ein leerer Startpunkt verhindert das Öffnen einer Route.
-12. Eine verweigerte Standortfreigabe zeigt eine verständliche Meldung.
-13. Ein nicht erreichbarer externer Dienst zeigt einen sichtbaren Fehlerstatus.
+   Öffnungsstatus, Entfernung, Kartenlink und Routenknopf.
+10. Der Routenknopf zeigt den Weg zur Tankstelle in der eingebetteten Karte,
+    ausgehend vom eingegebenen Startpunkt oder ohne Startpunkt vom gewählten
+    Campus.
+11. „Jetzt“ setzt Datum und Uhrzeit auf die Zeitzone Europe/Berlin.
+12. Ein leerer Startpunkt verhindert das Öffnen einer Campusroute.
+13. Eine verweigerte Standortfreigabe zeigt eine verständliche Meldung.
+14. Ein nicht erreichbarer externer Dienst zeigt einen sichtbaren Fehlerstatus.
 
 ## Grenzen
 
