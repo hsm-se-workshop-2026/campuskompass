@@ -274,6 +274,22 @@
       .study-downloads { display: flex; align-items: center; gap: 14px; }
       .study-content { padding: 0 24px 22px; }
       .study-note { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+      .fuel-card { grid-column: 1 / -1; }
+      .fuel-content { padding: 0 24px 20px; }
+      .fuel-status { margin: 0 0 12px; color: var(--muted); font-size: 12px; }
+      .fuel-status.error { color: #a22d2d; }
+      .fuel-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+      .fuel-station { min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 12px; }
+      .fuel-station-heading { display: flex; justify-content: space-between; gap: 8px; }
+      .fuel-station-heading strong { font-size: 13px; }
+      .fuel-open { flex-shrink: 0; color: var(--green); font-size: 11px; }
+      .fuel-open.closed { color: var(--muted); }
+      .fuel-address { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
+      .fuel-distance { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+      .fuel-prices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+      .fuel-price { padding: 9px 7px; border-radius: 8px; background: var(--brand-soft); text-align: center; }
+      .fuel-price span { display: block; color: var(--muted); font-size: 10px; }
+      .fuel-price strong { display: block; margin-top: 4px; color: var(--brand); font-size: 12px; }
       .card-heading > a.status { text-decoration: none; }
       .card-heading > a.status:hover { text-decoration: underline; }
       .study-status { margin: 12px 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
@@ -346,7 +362,8 @@
 
       @media (max-width: 780px) {
         .dashboard-grid { grid-template-columns: 1fr; }
-        .weather-card, .train-card, .route-card { grid-column: auto; }
+        .weather-card, .train-card, .route-card, .fuel-card { grid-column: auto; }
+        .fuel-list { grid-template-columns: 1fr; }
         .route-layout { grid-template-columns: 1fr; }
         .map-frame { min-height: 300px; border-top: 1px solid var(--line); border-left: 0; }
         .welcome { align-items: flex-start; }
@@ -376,6 +393,7 @@
         .card-heading:has(.menu-refresh) { align-items: flex-start; }
         .card-heading { padding-right: 18px; padding-left: 18px; }
         .menu-content, .route-controls { padding-right: 18px; padding-left: 18px; }
+        .fuel-content { padding-right: 18px; padding-left: 18px; }
         .day-planner { gap: 10px; padding: 16px; }
         .planner-field { flex: 1; min-width: 130px; }
         .train-info, .train-footer { padding-right: 18px; padding-left: 18px; }
@@ -473,6 +491,23 @@
               <span class="status">Änderungen vor Ort sind möglich.</span>
               <a class="text-link" href="https://www.stw-thueringen.de/mensen/" target="_blank" rel="noreferrer">Quelle: Studierendenwerk Thüringen&nbsp; ↗</a>
             </div>
+          </div>
+        </section>
+
+        <section class="card fuel-card" aria-labelledby="fuel-title">
+          <div class="card-heading">
+            <div>
+              <h2 id="fuel-title">Tankstellen nahe dem Campus</h2>
+              <p>Die drei nächstgelegenen Tankstellen mit aktuellen Preisen</p>
+            </div>
+            <button class="button secondary" id="fuel-refresh" type="button">↻&nbsp; Aktualisieren</button>
+          </div>
+          <div class="fuel-content">
+            <p class="fuel-status" id="fuel-status" aria-live="polite">Kraftstoffpreise werden geladen …</p>
+            <div class="fuel-list" id="fuel-list" aria-live="polite">
+              <p class="loading">Tankstellen werden gesucht …</p>
+            </div>
+            <p class="data-note">Quelle: <a href="https://creativecommons.tankerkoenig.de/" target="_blank" rel="noreferrer">Tankerkönig</a> · Daten der Markttransparenzstelle für Kraftstoffe. Entfernungen sind Luftlinie.</p>
           </div>
         </section>
 
@@ -586,6 +621,7 @@
       };
 
       const menuSource = "/api/mensa";
+      const fuelSource = "/api/fuel";
       const mensas = {
         Schmalkalden: { resourceId: "73", name: "Mensa Blechhammer" },
         Gera: { resourceId: "67", name: "Mensa Weg der Freundschaft" },
@@ -596,6 +632,7 @@
         mr: "mensaRegional",
       };
       let weatherRequestId = 0;
+      let fuelRequestId = 0;
       let studyPlanSessions = [];
       let studyPlanLoadError = null;
       let lastRouteOrigin = "";
@@ -957,6 +994,109 @@
         }
       }
 
+      async function loadFuelPrices() {
+        const status = document.querySelector("#fuel-status");
+        const list = document.querySelector("#fuel-list");
+        const refresh = document.querySelector("#fuel-refresh");
+        const requestId = ++fuelRequestId;
+        status.classList.remove("error");
+        status.textContent = "Kraftstoffpreise werden geladen …";
+        refresh.disabled = true;
+        list.replaceChildren(Object.assign(document.createElement("p"), {
+          className: "loading",
+          textContent: "Tankstellen werden gesucht …",
+        }));
+
+        try {
+          const response = await fetch(fuelSource);
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || `Kraftstoffpreise antworten mit HTTP ${response.status}`);
+          if (!Array.isArray(data.stations)) throw new Error("Die Kraftstoffdaten haben ein ungültiges Format.");
+          if (requestId !== fuelRequestId) return;
+          if (data.stations.length === 0) {
+            throw new Error("Im Umkreis von 10 km wurden keine Tankstellen gefunden.");
+          }
+
+          list.replaceChildren();
+          for (const station of data.stations) {
+            const article = document.createElement("article");
+            article.className = "fuel-station";
+
+            const heading = document.createElement("div");
+            heading.className = "fuel-station-heading";
+            const name = document.createElement("strong");
+            name.textContent = station.name || station.brand || "Tankstelle";
+            heading.append(name);
+
+            if (typeof station.isOpen === "boolean") {
+              const openStatus = document.createElement("span");
+              openStatus.className = `fuel-open${station.isOpen ? "" : " closed"}`;
+              openStatus.textContent = station.isOpen ? "Geöffnet" : "Geschlossen";
+              heading.append(openStatus);
+            }
+            article.append(heading);
+
+            const address = document.createElement("p");
+            address.className = "fuel-address";
+            address.textContent = [station.street, [station.postalCode, station.place].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+            article.append(address);
+
+            const distance = document.createElement("p");
+            distance.className = "fuel-distance";
+            distance.textContent = `${Number(station.dist).toLocaleString("de-DE", {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })} km Luftlinie`;
+            article.append(distance);
+
+            const prices = { E5: null, E10: null, Diesel: null };
+            for (const fuel of Array.isArray(station.fuels) ? station.fuels : []) {
+              if (!fuel || typeof fuel !== "object") continue;
+              const fuelName = typeof fuel.name === "string" ? fuel.name.toLowerCase() : "";
+              const label = fuel.category === "diesel"
+                ? "Diesel"
+                : fuelName.includes("e10")
+                  ? "E10"
+                  : fuelName.includes("e5")
+                    ? "E5"
+                    : null;
+              if (label && Number.isFinite(fuel.price)) prices[label] = fuel.price;
+            }
+
+            const priceList = document.createElement("div");
+            priceList.className = "fuel-prices";
+            for (const [label, price] of Object.entries(prices)) {
+              const priceItem = document.createElement("div");
+              priceItem.className = "fuel-price";
+              const fuelLabel = document.createElement("span");
+              fuelLabel.textContent = label;
+              const fuelPrice = document.createElement("strong");
+              fuelPrice.textContent = price === null
+                ? "—"
+                : new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(price);
+              priceItem.append(fuelLabel, fuelPrice);
+              priceList.append(priceItem);
+            }
+            article.append(priceList);
+            list.append(article);
+          }
+
+          const timestamp = new Date(data.timestamp);
+          const updatedAt = data.timestamp && !Number.isNaN(timestamp.getTime())
+            ? new Intl.DateTimeFormat("de-DE", { dateStyle: "short", timeStyle: "short" }).format(timestamp)
+            : "unbekannt";
+          status.textContent = `${data.stations.length} Tankstellen · Datenstand: ${updatedAt}`;
+        } catch (error) {
+          if (requestId !== fuelRequestId) return;
+          list.replaceChildren();
+          status.textContent = error.message || "Kraftstoffpreise konnten nicht geladen werden.";
+          status.classList.add("error");
+          console.error("Kraftstoffpreise konnten nicht geladen werden:", error);
+        } finally {
+          if (requestId === fuelRequestId) refresh.disabled = false;
+        }
+      }
+
       function mapsDirections(origin) {
         const destination = getRouteDestinationForDate(getSelectedDate());
         const url = new URL("https://www.google.com/maps/dir/");
@@ -1040,6 +1180,7 @@
 
       document.querySelector("#weather-refresh").addEventListener("click", loadWeather);
       document.querySelector("#menu-refresh").addEventListener("click", loadMenu);
+      document.querySelector("#fuel-refresh").addEventListener("click", loadFuelPrices);
       const selectedDateInput = document.querySelector("#selected-date");
       const selectedTimeInput = document.querySelector("#selected-time");
       const selectedDateTimeFormatter = new Intl.DateTimeFormat("sv-SE", {
@@ -1102,6 +1243,7 @@
       updateClock();
       updatePlanDate();
       loadStudyPlan();
+      loadFuelPrices();
       window.setInterval(updateClock, 30000);
       loadWeather();
     </script>

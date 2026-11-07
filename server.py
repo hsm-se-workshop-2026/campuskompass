@@ -1,5 +1,6 @@
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from datetime import date
+import json
 import os
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -10,8 +11,24 @@ from urllib.request import Request, urlopen
 HOST = "127.0.0.1"
 PORT = int(os.environ.get("PORT", "8000"))
 UPSTREAM_URL = "https://www.stw-thueringen.de/xhr/loadspeiseplan.html"
+FUEL_UPSTREAM_URL = "https://creativecommons.tankerkoenig.de/api/v4/stations/search"
 PROJECT_DIR = Path(__file__).resolve().parent
 MENSA_RESOURCES = {"67", "73"}
+CAMPUS_COORDINATES = {"lat": "50.72", "lng": "10.45", "rad": "10"}
+
+
+def load_env_file(path):
+    if not path.is_file():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
+
+
+load_env_file(PROJECT_DIR / ".env")
 
 
 class DashboardHandler(SimpleHTTPRequestHandler):
@@ -20,6 +37,8 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         parsed_path = urlsplit(self.path)
+        if parsed_path.path == "/api/fuel":
+            return self.do_fuel_prices()
         if parsed_path.path != "/api/mensa":
             return super().do_GET()
 
@@ -64,6 +83,60 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         except (TimeoutError, URLError, OSError) as error:
             self.log_error("Speiseplan-Quelle ist nicht erreichbar: %s", error)
             self.send_error(502, "Das Studierendenwerk ist derzeit nicht erreichbar.")
+
+    def do_fuel_prices(self):
+        api_key = os.environ.get("TANKERKOENIG_API_KEY", "").strip()
+        if not api_key:
+            self.send_json(503, {
+                "error": "Kraftstoffpreise nicht konfiguriert. Setze TANKERKOENIG_API_KEY und starte den Server neu."
+            })
+            return
+
+        query = urlencode({"apikey": api_key, **CAMPUS_COORDINATES})
+        request = Request(
+            f"{FUEL_UPSTREAM_URL}?{query}",
+            headers={"Accept": "application/json"},
+        )
+
+        try:
+            with urlopen(request, timeout=15) as response:
+                payload = json.loads(response.read())
+        except HTTPError as error:
+            self.log_error("Tankerkönig-Quelle antwortet mit HTTP %s", error.code)
+            if error.code == 401:
+                message = "Tankerkönig-API-Schlüssel ungültig. Prüfe TANKERKOENIG_API_KEY."
+            elif error.code == 503:
+                message = "Tankerkönig ist ausgelastet oder das Anfrage-Limit wurde erreicht. Bitte später erneut versuchen."
+            else:
+                message = f"Tankerkönig antwortet mit HTTP {error.code}."
+            self.send_json(502, {"error": message})
+            return
+        except (TimeoutError, URLError, OSError, json.JSONDecodeError) as error:
+            self.log_error("Tankerkönig-Quelle ist nicht erreichbar: %s", error)
+            self.send_json(502, {"error": "Tankerkönig ist derzeit nicht erreichbar."})
+            return
+
+        if not isinstance(payload, dict) or not isinstance(payload.get("stations"), list):
+            self.log_error("Tankerkönig-Quelle hat ein ungültiges Antwortformat geliefert.")
+            self.send_json(502, {"error": "Die Kraftstoffdaten haben ein ungültiges Format."})
+            return
+
+        stations = [
+            station for station in payload["stations"]
+            if isinstance(station, dict)
+            and isinstance(station.get("dist"), (int, float))
+        ]
+        payload["stations"] = sorted(stations, key=lambda station: station["dist"])[:3]
+        self.send_json(200, payload)
+
+    def send_json(self, status, payload):
+        body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
 
 def main():
