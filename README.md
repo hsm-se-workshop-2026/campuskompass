@@ -14,6 +14,8 @@ Die Google-Maps-Route im Abschnitt „Dein Weg zum Campus“ richtet ihr Ziel na
 dem Studienplan: Bei Gera-Terminen führt sie zur DHGE Gera, sonst zur Hochschule
 Schmalkalden. Mit „Jetzt“ stellst du Datum und Uhrzeit auf die aktuelle Zeit in
 Deutschland zurück und aktualisierst die Tagesansichten.
+Die Webcam Grasberg in Schmalkalden wird als kompaktes Livebild angezeigt und
+jede Minute direkt von Antenne Schmalkalden neu geladen.
 
 1. Öffne ein Terminal im Ordner `Dashboard`.
 2. Starte den Dashboard-Server:
