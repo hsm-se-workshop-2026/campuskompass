@@ -10,7 +10,7 @@ footer: "CampusKompass"
 
 ## CampusKompass
 
-Vereinfachte Code- und Anforderungspräsentation
+Vom Bedarf zur Webanwendung
 
 ---
 
@@ -18,7 +18,7 @@ Vereinfachte Code- und Anforderungspräsentation
 
 1. Ziel und Funktionen
 2. User Stories und Use Cases
-3. MoSCoW-Analyse
+3. MoSCoW-Priorisierung
 4. Architektur
 5. Bedienung und Weboberfläche
 
@@ -26,31 +26,54 @@ Vereinfachte Code- und Anforderungspräsentation
 
 ## 1. Ziel und Funktionen
 
+### Ausgangssituation
+
+Studierende benötigen für einen Studientag Informationen aus mehreren
+Quellen. CampusKompass bündelt diese Informationen in einem lokalen
+Dashboard und ordnet sie dem ausgewählten Datum und Studienort zu.
+
 ### Ziel
 
-CampusKompass bündelt die wichtigsten Informationen für einen Studientag an
-den Standorten Schmalkalden und Gera in einer lokalen Weboberfläche. Die
-Anwendung reduziert den Wechsel zwischen mehreren externen Informationsquellen
-und ordnet die Daten dem ausgewählten Datum zu.
-
-### Funktionen
-
-- Studienplan nach Datum filtern und Termine mit Zeit, Veranstaltung,
-  Lehrkraft, Ort und Raum anzeigen
-- Mensaplan des passenden Campus über den lokalen Server laden
-- Wetter für Campus, Datum und Uhrzeit anzeigen
-- Campusabhängiges Ziel für Route und ÖPNV-Fahrplanauskunft setzen
-- Google-Maps-Route aus Startort oder Browserstandort öffnen
-- Auswahl mit „Jetzt“ auf die aktuelle Zeit in Deutschland zurücksetzen
+Eine zentrale, einfach bedienbare Weboberfläche für die Tagesplanung an den
+Standorten Schmalkalden und Gera.
 
 ---
 
-## CampusKompass auf einen Blick
+## 1. Ziel und Funktionen
 
-- Lokales Webdashboard für Studierende
-- Studienplan, Mensaplan, Wetter und Campusroute in einer Oberfläche
-- Frontend mit HTML, CSS und JavaScript
-- Python-Server für statische Dateien und den Mensa-Proxy
+### Kernfunktionen
+
+- Studienplan nach Datum filtern
+- Termine mit Uhrzeit, Veranstaltung, Lehrkraft, Ort und Raum anzeigen
+- passenden Mensaplan laden
+- Wetter für Datum, Uhrzeit und Campus anzeigen
+- Campusziel für Route und ÖPNV-Fahrplan bestimmen
+- Google-Maps-Route aus Startort oder Browserstandort öffnen
+- Auswahl mit „Jetzt“ auf die aktuelle Zeit zurücksetzen
+
+### Leitidee
+
+Die zentrale Datums- und Zeitauswahl steuert alle abhängigen Ansichten.
+
+---
+
+## 2. User Stories und Use Cases
+
+### Von Bedürfnissen zu Anforderungen
+
+User Stories beschreiben den erwarteten Nutzen aus Sicht der Studierenden.
+Use Cases konkretisieren anschließend den Ablauf, beteiligte Akteure,
+Vorbedingungen, Alternativen und Ergebnisse.
+
+```text
+Nutzerbedarf
+    ↓
+User Story
+    ↓
+Use Case mit Ablauf und Akteuren
+    ↓
+Umsetzung im Code
+```
 
 ---
 
@@ -58,233 +81,326 @@ und ordnet die Daten dem ausgewählten Datum zu.
 
 ### User Stories
 
-- **CAMPUS-01:** Studienplan für ein Datum anzeigen
-- **CAMPUS-02:** Passenden Mensaplan anzeigen
-- **CAMPUS-03:** Wetter am Campus anzeigen
-- **CAMPUS-04:** Route zum Campus planen
-- **CAMPUS-05:** Fahrplan für Datum und Uhrzeit öffnen
-- **CAMPUS-06:** Auswahl auf die aktuelle Zeit setzen
-
-### Use Cases: CampusKompass
-
-| ID | Use Case | Hauptakteur |
+| ID | Nutzerziel | Use Case |
 |---|---|---|
-| UC-01 | Dashboard öffnen | Student/in |
-| UC-02 | Studienplan für ein Datum anzeigen | Student/in |
-| UC-03 | Mensaplan laden | Student/in |
-| UC-04 | Wetterdaten anzeigen | Student/in |
-| UC-05 | Route zum Campus planen | Student/in |
-| UC-06 | Fahrplan für Datum und Uhrzeit öffnen | Student/in |
-| UC-07 | Auswahl auf aktuelle Zeit setzen | Student/in |
+| CAMPUS-01 | Studienplan für ein Datum sehen | UC-02 |
+| CAMPUS-02 | passenden Mensaplan sehen | UC-03 |
+| CAMPUS-03 | Wetter am Campus sehen | UC-04 |
+| CAMPUS-04 | Route zum Campus planen | UC-05 |
+| CAMPUS-05 | Fahrplan für Datum und Uhrzeit öffnen | UC-06 |
+| CAMPUS-06 | Auswahl auf „Jetzt“ setzen | UC-07 |
 
-Die Use Cases beschreiben Vorbedingungen, Alternativfälle, externe Dienste und
-die erwarteten Ergebnisse. User Stories und Use Cases sind über ihre IDs
-rückverfolgbar; die vollständigen Spezifikationen stehen in
-[`requirements/userstories-moscow.md`](../requirements/userstories-moscow.md)
-und [`requirements/usecases.md`](../requirements/usecases.md).
+Beispiel: „Als Student möchte ich den Studienplan für ein Datum sehen, damit
+ich meine Termine kenne.“
 
 ---
 
-## 3. MoSCoW-Analyse
+## 2. User Stories und Use Cases
 
-Die MoSCoW-Methode priorisiert Anforderungen nach ihrer Bedeutung für das MVP:
+### Beispiel: UC-02 Studienplan anzeigen
 
-- **Must have:** unverzichtbar für die erste Version
-- **Should have:** wichtig, aber verschiebbar
-- **Could have:** nützliche Erweiterung
-- **Won't have:** in dieser Version bewusst ausgeschlossen
+1. Student/in wählt ein Datum.
+2. Frontend filtert `study-plan.json`.
+3. Termine werden nach Uhrzeit sortiert.
+4. Veranstaltung, Lehrkraft, Ort und Raum werden angezeigt.
+5. Der Studienort bestimmt Mensa, Wetterstandort und Routenziel.
 
-| Priorität | Beispiele |
+**Alternative:** Für einen Tag ohne Termine wird ein Hinweis angezeigt.
+
+Die Use-Case-ID verbindet die fachliche Anforderung mit der späteren
+technischen Umsetzung.
+
+---
+
+## 3. MoSCoW-Priorisierung
+
+### Warum priorisieren?
+
+Nicht jede gewünschte Funktion kann gleichzeitig umgesetzt werden. MoSCoW
+hilft, den MVP auf den wichtigsten Nutzen zu konzentrieren.
+
+- **Must have:** unverzichtbar für den Kernnutzen
+- **Should have:** wichtig, aber notfalls verschiebbar
+- **Could have:** sinnvoller Zusatz
+- **Won't have:** bewusst nicht Bestandteil dieser Version
+
+---
+
+## 3. MoSCoW-Priorisierung
+
+| Priorität | CampusKompass-Anforderungen |
 |---|---|
-| Must have | Studienplan für ein Datum anzeigen |
-| Should have | Mensaplan und Wetter am passenden Campus |
-| Could have | Campusroute und Fahrplanauskunft |
-| Won't have | Nicht priorisierte Erweiterungen in dieser Version |
+| **Must have** | Studienplan für ein Datum anzeigen |
+| **Should have** | Mensaplan und Wetter am passenden Campus |
+| **Could have** | Campusroute, Fahrplanauskunft und „Jetzt“-Funktion |
+| **Won't have** | Funktionen außerhalb des priorisierten MVP-Umfangs |
+
+Die Priorisierung beeinflusst anschließend Architektur, Implementierungsumfang
+und Reihenfolge der Entwicklung.
+
+---
+
+## 3. MoSCoW-Priorisierung
+
+### Rückverfolgbarkeit
+
+```text
+CAMPUS-01 → UC-02 → study-plan.json → Studienplan-Karte
+CAMPUS-02 → UC-03 → /api/mensa → Mensa-Karte
+CAMPUS-03 → UC-04 → Open-Meteo → Wetter-Karte
+CAMPUS-04 → UC-05 → Google Maps → Routen-Karte
+CAMPUS-05 → UC-06 → VMT → Fahrplan-Widget
+CAMPUS-06 → UC-07 → Datums-/Zeitsteuerung
+```
+
+So bleibt nachvollziehbar, welche Funktion aus welcher Anforderung entstanden
+ist und wo sie im System umgesetzt wird.
 
 ---
 
 ## 4. Architektur
 
-### Systemarchitektur
+### Systemaufteilung
 
 ```text
 Browser
-  |
-  +--> index.html / JavaScript
-  |       +--> study-plan.json
-  |       +--> Open-Meteo
-  |       +--> Google Maps
-  |       +--> /api/mensa
-  |
-  +--> server.py
-          +--> statische Dateien
-          +--> Proxy zum Studierendenwerk Thüringen
+  ├─ index.html + css/style.css
+  ├─ js/app.js
+  ├─ js/campus-context.js
+  └─ study-plan.json
+          │
+          └── server.py
+                └── /api/mensa
+                      └── Studierendenwerk Thüringen
 ```
 
----
-
-## CampusKompass: Ablauf
-
-1. Nutzer wählt ein Datum.
-2. Der Studienplan wird nach diesem Datum gefiltert.
-3. Der Studienort bestimmt Mensa, Wetterstandort und Routenziel.
-4. Mensaplan und Wetter werden geladen.
-5. Die Campusroute wird als Wegbeschreibung angezeigt.
-
-Der Proxy in `server.py` verhindert, dass der Browser den Mensa-Endpunkt
-direkt wegen CORS ansprechen muss.
+Der Browser übernimmt Darstellung und Interaktion. Der Python-Server liefert
+statische Dateien aus und vermittelt ausschließlich den Mensa-Aufruf.
 
 ---
 
-### 4.1 Modellierung: Klassendiagramm Backend
+## 4. Architektur
 
-Das Backend besteht aus dem Modul `server.py` und dem spezialisierten Handler
-`DashboardHandler`:
+### Zuständigkeiten
+
+| Baustein | Verantwortung |
+|---|---|
+| `index.html` | Struktur und Eingabefelder der Oberfläche |
+| `css/style.css` | Layout, responsive Darstellung und Zustände |
+| `js/app.js` | Laden, Validieren, Filtern und Rendern der Daten |
+| `js/campus-context.js` | Campus-, Mensa-, Wetter- und Routenzuordnung |
+| `study-plan.json` | strukturierte Studienplandaten |
+| `server.py` | lokaler Server und validierter Mensa-Proxy |
+
+Die Trennung reduziert die Auswirkungen von Änderungen und macht die
+Komponenten einzeln überprüfbar.
+
+---
+
+## 4. Architektur
+
+### Campusabhängiger Kontext
+
+Aus dem Studienort werden zentrale Folgeinformationen abgeleitet:
 
 ```text
-server.py
-  +-- main()
-  +-- ThreadingHTTPServer
-          +-- DashboardHandler
-                  +-- do_GET()
-                  +-- /api/mensa -> Studierendenwerk Thüringen
+Studienplan + ausgewähltes Datum
+              ↓
+        Campus-Kontext
+      ↙       ↓        ↘
+    Mensa   Wetter    Routenziel
+              ↓
+        Fahrplanziel
 ```
 
-`DashboardHandler` erweitert `SimpleHTTPRequestHandler`. Dadurch werden
-statische Dateien ausgeliefert; der zusätzliche API-Pfad validiert Datum und
-Mensa-ID und leitet die Anfrage als POST weiter.
-
-Quelle: [`modellierung/klassendiagramm_backend.puml`](../modellierung/klassendiagramm_backend.puml)
+Die Zuordnung ist in `campus-context.js` gebündelt. Neue Standorte können
+dadurch zentral ergänzt werden.
 
 ---
 
-### 4.2 Modellierung: Klassendiagramm Frontend
+## 4. Architektur
 
-Das JavaScript in `index.html` ist prozedural organisiert. Für die Modellierung
-wird es als `CampusDashboard` mit seinen Zuständigkeiten dargestellt:
-
-```text
-CampusDashboard
-  +-- StudySession[] aus study-plan.json
-  +-- loadStudyPlan() / renderStudyPlan()
-  +-- loadMenu() -> Meal[]
-  +-- loadWeather() -> WeatherData
-  +-- showRoute() -> RouteDestination
-```
-
-Die Funktionen wählen anhand des Datums Mensa, Wetterstandort und Routenziel
-aus und aktualisieren anschließend die Oberfläche.
+### Klassendiagramm Frontend mit PlantUML
 
 Quelle: [`modellierung/klassendiagramm_frontend.puml`](../modellierung/klassendiagramm_frontend.puml)
 
----
+```plantuml
+class CampusDashboard {
+  +loadStudyPlan()
+  +renderStudyPlan(selectedDate)
+  +loadMenu()
+  +loadWeather()
+  +showRoute(origin)
+}
 
-### 4.3 Modellierung: Paketdiagramm
+class StudySession
+class Mensa
+class Meal
+class WeatherData
+class RouteDestination
 
-```text
-CampusKompass
-  +-- Frontend: index.html
-  +-- Backend: server.py
-  +-- Daten: study-plan.json, assets/
-
-Frontend -> Backend -> Studierendenwerk Thüringen
-Frontend -> Open-Meteo
-Frontend -> Google Maps
-Frontend -> VMT Fahrplanauskunft
+CampusDashboard "1" o-- "*" StudySession
+CampusDashboard ..> Mensa
+CampusDashboard ..> Meal
+CampusDashboard ..> WeatherData
+CampusDashboard ..> RouteDestination
 ```
 
-Die Paketgrenzen machen sichtbar, dass nur der Mensa-Aufruf über das Backend
-läuft. Wetter, Karten, Fahrplan und Studienplandaten werden vom Frontend
-verarbeitet.
+Das Diagramm beschreibt die fachlichen Datenobjekte und die Zuständigkeiten
+des JavaScript-Frontends. Obwohl das Frontend prozedural umgesetzt ist, macht
+die modellierte Sicht die Beziehungen verständlich.
 
-Quelle: [`modellierung/paketdiagramm.puml`](../modellierung/paketdiagramm.puml)
+---
+
+## 4. Architektur
+
+### Klassendiagramm Backend mit PlantUML
+
+Quelle: [`modellierung/klassendiagramm_backend.puml`](../modellierung/klassendiagramm_backend.puml)
+
+```plantuml
+class DashboardHandler {
+  +do_GET()
+}
+
+class SimpleHTTPRequestHandler
+class ThreadingHTTPServer
+class Request
+
+DashboardHandler --|> SimpleHTTPRequestHandler
+ThreadingHTTPServer o-- DashboardHandler
+DashboardHandler ..> Request
+DashboardHandler ..> "Studierendenwerk Thüringen"
+```
+
+Das Diagramm zeigt, dass `DashboardHandler` den Standard-HTTP-Handler
+erweitert. So werden statische Dateien ausgeliefert und der zusätzliche
+`/api/mensa`-Aufruf kontrolliert an den externen Dienst weitergeleitet.
+
+---
+
+## 4. Architektur
+
+### Wofür werden die Klassendiagramme genutzt?
+
+- **Entwurf:** Zuständigkeiten werden vor bzw. während der Implementierung
+  sichtbar gemacht.
+- **Kommunikation:** Teammitglieder können über dieselben Begriffe sprechen.
+- **Rückverfolgbarkeit:** Use Cases lassen sich auf Datenobjekte und
+  Funktionen im Code beziehen.
+- **Wartung:** Änderungen an Campus-Kontext, Frontend oder Proxy können
+  gezielter eingeordnet werden.
+- **Dokumentation:** Die `.puml`-Dateien bleiben versionierbare Quellen und
+  können mit PlantUML als Diagramme gerendert werden.
+
+Die Diagramme sind damit Entwicklungs- und Dokumentationshilfen, keine
+zusätzliche Programmlogik.
+
+---
+
+## 4. Architektur
+
+### Umsetzung der Anforderungen im Code
+
+1. **Datenbasis:** Termine liegen strukturiert in `study-plan.json`.
+2. **Auswahl:** Datum und Uhrzeit werden zentral verwaltet.
+3. **Verarbeitung:** `app.js` filtert Termine und bestimmt den Campus.
+4. **Datenzugriff:** Wetter, Karten und Fahrplan werden über externe Dienste
+   geladen; die Mensa läuft über `/api/mensa`.
+5. **Darstellung:** Ergebnisse werden in separaten Dashboard-Karten gerendert.
+
+Fehler bei JSON-Daten, Netzwerkzugriffen oder API-Antworten werden als
+Statusmeldungen in der Oberfläche angezeigt.
+
+---
+
+## 4. Architektur
+
+### Warum ein Mensa-Proxy?
+
+Der Browser darf den externen Mensa-Endpunkt nicht zuverlässig direkt
+ansprechen, weil der Dienst keinen passenden CORS-Zugriff bereitstellt.
+
+```text
+Browser → server.py → Studierendenwerk Thüringen
+          Validierung       Speiseplan
+```
+
+`server.py` akzeptiert nur bekannte Ressourcen-IDs und gültige Datumswerte.
+Fehler werden ausdrücklich als HTTP 400 oder 502 zurückgemeldet.
 
 ---
 
 ## 5. Bedienung und Weboberfläche
 
-### Bedienablauf
+### Start und erster Ablauf
 
-1. `python .\server.py` starten und `http://127.0.0.1:8000/` öffnen.
-2. Datum und Abfahrtszeit im Bereich „Tagesplanung“ auswählen.
-3. Studienplan, Mensa und Wetter für die Auswahl prüfen.
-4. Im Fahrplan-Widget Startort und das angezeigte Campusziel verwenden.
-5. Für eine Autofahrt Startpunkt eingeben oder den Standort freigeben.
-6. Mit „Jetzt“ jederzeit zur aktuellen Zeit zurückkehren.
+1. Server mit `python .\server.py` starten.
+2. `http://127.0.0.1:8000/` im Browser öffnen.
+3. Datum und Abfahrtszeit in der Tagesplanung auswählen.
+4. Studienplan, Mensa und Wetter prüfen.
+5. Route oder Fahrplan für den angezeigten Campus verwenden.
+
+Die zentrale Auswahl aktualisiert alle abhängigen Karten.
+
+---
+
+## 5. Bedienung und Weboberfläche
 
 ### Oberfläche
 
-- Kopfbereich mit Hochschullinks und aktuellem Datum/Uhrzeit
-- Tagesplanung als zentrale Eingabe für Datum und Zeit
-- Karten für Wetter, Mensa, Studienplan, Fahrplan und Route
-- Statusmeldungen bei Lade-, Netzwerk- oder Datenfehlern
-- Responsive Darstellung für Desktop und mobile Bildschirmbreiten
-- Externe Inhalte werden über Links oder eingebettete Widgets geöffnet
+- Kopfbereich mit Logos und aktueller Zeit
+- zentrale Tagesplanung für Datum und Abfahrtszeit
+- Studienplan-Karte mit den Terminen des Tages
+- Mensa- und Wetter-Karten
+- Fahrplan-Widget und Karte für den Weg zum Campus
+- sichtbare Status- und Fehlermeldungen
+- responsive Darstellung für Desktop und mobile Geräte
 
-Die Oberfläche verwendet semantische HTML-Elemente, sichtbare Fokuszustände,
-beschriftete Formularelemente und `aria-live`-Bereiche für dynamische Status-
-und Ergebnisanzeigen.
-
----
-
-### Tests und Erweiterbarkeit
-
-### Durchgeführte Prüfungen
-
-- Python-Syntaxprüfung mit `python -m py_compile .\server.py`
-- JavaScript-Syntaxprüfung mit `node --check`
-- JSON-Validierung von `study-plan.json`
-- HTTP-Smoke-Test des lokalen Servers
-- Prüfung ungültiger Mensa-IDs mit erwarteter HTTP-400-Antwort
-- VS-Code-Diagnose ohne gemeldete Fehler oder Warnungen
-- Manuelle Prüfung von Datumswechsel, Campuswechsel, Wetterfehlern und
-  Standortfreigabe
-
-Die externen Dienste bleiben abhängig von Netzwerk, Verfügbarkeit und ihrer
-aktuellen Antwortstruktur. Das Testkonzept ist in
-[`testkonzept.md`](./testkonzept.md) dokumentiert.
-
-### Erweiterbarkeit
-
-- Neue Standorte werden zentral in `js/campus-context.js` ergänzt.
-- Neue Termine werden ausschließlich in `study-plan.json` gepflegt.
-- Weitere Datenquellen können als eigene Lade- und Renderfunktionen ergänzt
-  werden.
-- Der Mensa-Proxy kann um zusätzliche, whitelisted Ressourcen erweitert werden.
-- Die Frontend-Funktionen können später in klar getrennte Module oder
-  Komponenten überführt werden.
-- Automatisierte Browser- und API-Tests können auf dem vorhandenen Testkonzept
-  aufbauen.
-
-Die Trennung von Daten, Campuszuordnung, Oberfläche und Proxy reduziert dabei
-die Auswirkungen zukünftiger Änderungen.
+Die Oberfläche verwendet beschriftete Formulare, sichtbare Fokuszustände und
+`aria-live`-Bereiche für dynamische Ergebnisse.
 
 ---
 
-## Qualitäts- und Umsetzungsstand
+## 5. Bedienung und Weboberfläche
 
-- CampusKompass wird mit `python .\campuskompass\server.py` gestartet.
-- Die externen Karten-, Wetter- und Mensadienste benötigen eine
-  Netzwerkverbindung.
+### Beispiel: Campuswechsel
+
+1. Das ausgewählte Datum enthält einen Termin in Gera.
+2. Der Studienplan liefert den Studienort.
+3. `campus-context.js` wählt Gera als Kontext.
+4. Mensa, Wetter, Google Maps und VMT erhalten die Gera-Ziele.
+5. Die Karten zeigen die aktualisierten Informationen.
+
+Dadurch muss die Nutzerin oder der Nutzer den Campus nicht in mehreren
+Bereichen manuell einstellen.
 
 ---
 
-## Start der Anwendungen
+## 5. Bedienung und Weboberfläche
 
-### CampusKompass
+### Entwicklungs- und Qualitätsgedanke
 
-```powershell
-cd ".\campuskompass"
-python .\server.py
+Der Weg vom Bedarf zum Ergebnis bleibt überprüfbar:
+
+```text
+User Story
+   → Use Case
+      → MoSCoW-Priorität
+         → Architekturentscheidung
+            → Code und Daten
+               → Bedienbare Weboberfläche
 ```
 
-Danach: <http://127.0.0.1:8000/>
+Der CampusKompass zeigt damit nicht nur ein Ergebnis, sondern den vollständigen
+Software-Engineering-Prozess hinter der Anwendung.
 
 ---
 
 ## Fazit
 
-- CampusKompass bündelt studienbezogene Informationen in einer Weboberfläche.
-- Die MoSCoW-Priorisierung trennt MVP-Funktionen von Erweiterungen.
-- Nächste Ausbaustufen sind zusätzliche Standorte, Datenquellen und
-  automatisierte Browser-Tests.
+- CampusKompass bündelt studienbezogene Informationen in einer Oberfläche.
+- Anforderungen werden über User Stories und Use Cases konkretisiert.
+- MoSCoW priorisiert den MVP und begrenzt den Entwicklungsumfang.
+- Die Architektur trennt Daten, Campuslogik, Oberfläche und Proxy.
+- Die Umsetzung endet in einer direkt nutzbaren Weboberfläche.
