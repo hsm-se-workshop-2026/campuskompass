@@ -17,8 +17,9 @@ const campuses = {
       longitude: campus.longitude,
     },
     mensa: {
-      openMensaId: 843,
+      resourceId: "73",
       name: "Mensa Blechhammer",
+      sourceUrl: "https://www.stw-thueringen.de/mensen/schmalkalden/mensa-blechhammer.html",
     },
     transit: {
       target: "Schmalkalden, Fachhochschule",
@@ -35,8 +36,9 @@ const campuses = {
       longitude: 12.0823,
     },
     mensa: {
-      openMensaId: 152,
+      resourceId: "67",
       name: "Mensa Weg der Freundschaft",
+      sourceUrl: "https://www.stw-thueringen.de/mensen/gera/mensa-weg-der-freundschaft.html",
     },
     transit: {
       target: "Gera, Weg der Freundschaft",

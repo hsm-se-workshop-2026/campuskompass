@@ -1,11 +1,6 @@
       import { getCampusContext } from "./campus-context.js";
 
-      const openMensaBaseUrl = "https://openmensa.org/api/v2";
-      const mealNoteLabels = {
-        vegan: "Vegan",
-        vegetarian: "Vegetarisch",
-        "ovo-lacto-vegetabil": "Vegetarisch",
-      };
+      const menuDataSource = "./mensa-data.json";
       // Zähler verhindern, dass verspätete Antworten einen neueren Stand
       // (z. B. nach einem schnellen Datumswechsel) wieder überschreiben.
       let weatherRequestId = 0;
@@ -13,23 +8,6 @@
       let studyPlanSessions = [];
       let studyPlanLoadError = null;
       let lastRouteOrigin = "";
-
-      function formatMealPrices(prices) {
-        const priceLabels = {
-          students: "Studierende",
-          employees: "Bedienstete",
-          pupils: "Schüler/innen",
-          others: "Gäste",
-        };
-        const formatCurrency = new Intl.NumberFormat("de-DE", {
-          style: "currency",
-          currency: "EUR",
-        });
-        return Object.entries(priceLabels)
-          .filter(([key]) => Number.isFinite(prices?.[key]))
-          .map(([key, label]) => `${label}: ${formatCurrency.format(prices[key])}`)
-          .join(" · ");
-      }
 
       const weatherDescriptions = {
         0: ["Klarer Himmel", "☀️"],
@@ -302,6 +280,23 @@
         }
       }
 
+      function formatDate(date) {
+        return new Intl.DateTimeFormat("de-DE").format(new Date(`${date}T12:00:00`));
+      }
+
+      function formatMenuUpdate(updatedAt) {
+        if (!updatedAt) return "";
+        const timestamp = new Intl.DateTimeFormat("de-DE", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Europe/Berlin",
+        }).format(new Date(updatedAt));
+        return ` · Datenstand ${timestamp} Uhr`;
+      }
+
       async function loadMenu() {
         const status = document.querySelector("#menu-status");
         const list = document.querySelector("#meal-list");
@@ -312,10 +307,7 @@
         const sourceLink = document.querySelector("#menu-source");
         updateMenuDate(selectedDate);
         document.querySelector("#menu-title").textContent = mensa.name;
-        sourceLink.hidden = !mensa.openMensaId;
-        if (mensa.openMensaId) {
-          sourceLink.href = `https://openmensa.org/c/${mensa.openMensaId}`;
-        }
+        sourceLink.href = mensa.sourceUrl;
         status.classList.remove("error");
         status.textContent = `${mensa.name} · Speiseplan wird geladen …`;
         refresh.disabled = true;
@@ -324,62 +316,44 @@
           textContent: "Gerichte werden geladen …",
         }));
 
-        if (!mensa.openMensaId) {
-          list.replaceChildren(Object.assign(document.createElement("div"), {
-            className: "menu-empty",
-            textContent: "Für diese Mensa ist derzeit kein Eintrag in OpenMensa hinterlegt.",
-          }));
-          status.textContent = `${mensa.name} · nicht bei OpenMensa verfügbar`;
-          status.classList.add("error");
-          refresh.disabled = false;
-          return;
-        }
-
         try {
-          const response = await fetch(
-            `${openMensaBaseUrl}/canteens/${mensa.openMensaId}/days/${selectedDate}/meals`,
-          );
+          const response = await fetch(menuDataSource, { cache: "no-store" });
           if (requestId !== menuRequestId) return;
-          if (response.status === 404) {
-            list.replaceChildren(Object.assign(document.createElement("div"), {
-              className: "menu-empty",
-              textContent: "Für diesen Tag ist bei OpenMensa kein Speiseplan verfügbar.",
-            }));
-            status.textContent = `${mensa.name} · kein Speiseplan für diesen Tag`;
-            return;
-          }
-          if (!response.ok) throw new Error(`Speiseplan antwortet mit HTTP ${response.status}`);
+          if (!response.ok) throw new Error(`Speiseplandaten antworten mit HTTP ${response.status}`);
 
           const menuData = await response.json();
           if (requestId !== menuRequestId) return;
-          if (!Array.isArray(menuData)) {
-            throw new Error("OpenMensa hat ein unerwartetes Datenformat geliefert.");
+          if (!menuData || typeof menuData.menus !== "object" || !menuData.menus) {
+            throw new Error("Die gespeicherten Speiseplandaten haben ein ungültiges Format.");
           }
-          const meals = menuData.map((meal) => {
-            if (!meal || typeof meal.name !== "string" || !meal.name.trim()) {
-              throw new Error("Ein Gericht enthält keinen gültigen Namen.");
-            }
-            return {
-              name: meal.name.trim(),
-              price: formatMealPrices(meal.prices),
-              category: typeof meal.category === "string" ? meal.category : "",
-              notes: Array.isArray(meal.notes)
-                ? meal.notes.filter((note) => typeof note === "string")
-                : [],
-            };
-          });
+          const inRange = selectedDate >= menuData.rangeStart && selectedDate <= menuData.rangeEnd;
+          if (!inRange) {
+            list.replaceChildren(Object.assign(document.createElement("div"), {
+              className: "menu-empty",
+              textContent: `Automatisch aktualisierte Speisepläne sind für ${formatDate(menuData.rangeStart)} bis ${formatDate(menuData.rangeEnd)} verfügbar.`,
+            }));
+            status.textContent = `${mensa.name} · Datum außerhalb des aktuellen Zeitraums`;
+            return;
+          }
+          const meals = menuData.menus[mensa.resourceId]?.[selectedDate] ?? [];
+          if (!Array.isArray(meals)) {
+            throw new Error("Für dieses Datum sind keine gültigen Speiseplandaten vorhanden.");
+          }
 
           if (meals.length === 0) {
             list.replaceChildren(Object.assign(document.createElement("div"), {
               className: "menu-empty",
-              textContent: "Für diesen Tag ist bei OpenMensa kein Speiseplan verfügbar.",
+              textContent: "Für diesen Tag sind in der offiziellen Quelle keine Gerichte eingetragen.",
             }));
-            status.textContent = `${mensa.name} · kein Speiseplan für diesen Tag`;
+            status.textContent = `${mensa.name} · kein Speiseplan für diesen Tag${formatMenuUpdate(menuData.updatedAt)}`;
             return;
           }
 
           list.replaceChildren();
           for (const meal of meals) {
+            if (!meal || typeof meal.name !== "string" || !meal.name.trim()) {
+              throw new Error("Ein Gericht enthält keinen gültigen Namen.");
+            }
             const article = document.createElement("article");
             article.className = "meal-item";
 
@@ -395,20 +369,17 @@
               article.append(price);
             }
 
-            for (const detail of [meal.category, ...meal.notes].filter(Boolean)) {
+            for (const detail of [meal.allergens, meal.additives].filter(Boolean)) {
               const note = document.createElement("p");
               note.className = "meal-details";
               note.textContent = detail;
               article.append(note);
             }
 
-            const symbols = meal.notes
-              .map((note) => mealNoteLabels[note.toLowerCase()])
-              .filter((label, index, labels) => label && labels.indexOf(label) === index);
-            if (symbols.length) {
+            if (Array.isArray(meal.symbols) && meal.symbols.length) {
               const badges = document.createElement("div");
               badges.className = "meal-badges";
-              for (const symbol of symbols) {
+              for (const symbol of meal.symbols) {
                 const badge = document.createElement("span");
                 badge.className = "meal-badge";
                 badge.textContent = symbol;
@@ -420,7 +391,7 @@
             list.append(article);
           }
 
-          status.textContent = `${meals.length} ${meals.length === 1 ? "Gericht" : "Gerichte"} in ${mensa.name} · direkt von OpenMensa`;
+          status.textContent = `${meals.length} ${meals.length === 1 ? "Gericht" : "Gerichte"} in ${mensa.name}${formatMenuUpdate(menuData.updatedAt)}`;
         } catch (error) {
           if (requestId !== menuRequestId) return;
           const message = document.createElement("div");
@@ -433,6 +404,7 @@
         } finally {
           if (requestId === menuRequestId) refresh.disabled = false;
         }
+
       }
 
       function mapsDirections(origin) {

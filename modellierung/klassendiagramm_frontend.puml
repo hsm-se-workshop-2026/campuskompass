@@ -32,14 +32,16 @@ class StudySession <<study-plan.json>> {
 
 class Mensa {
   +name: string
-  +openMensaId: number | null
+  +resourceId: string
+  +sourceUrl: string
 }
 
-class Meal <<OpenMensa API>> {
+class Meal <<mensa-data.json>> {
   +name: string
-  +category: string
-  +notes: string[]
-  +prices: object
+  +price: string
+  +allergens: string
+  +additives: string
+  +symbols: string[]
 }
 
 class WeatherData <<Open-Meteo>> {

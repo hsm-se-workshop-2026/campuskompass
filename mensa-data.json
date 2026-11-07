@@ -1,0 +1,498 @@
+{
+  "updatedAt": "2026-11-07T13:39:12+00:00",
+  "rangeStart": "2026-11-07",
+  "rangeEnd": "2026-11-20",
+  "menus": {
+    "73": {
+      "2026-11-07": [],
+      "2026-11-08": [],
+      "2026-11-09": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Rote Bete-Puffer mit Wurzelgemüse in Meerrettichsauce, dazu Kartoffelpüree",
+          "allergens": "Allergene: So,Sel,Su,Wz,Hf",
+          "additives": "Zusatzstoffe: 1,3",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Weiße Bohneneintopf mit Bockwurst dazu Mehrkornbrötchen",
+          "allergens": "Allergene: Sel,Ses,Wz,Ro,Gs,Hf",
+          "additives": "Zusatzstoffe: 1,2,3,4,8,T3",
+          "price": "Studierende: 2,80 € · Bedienstete: 5,10 € · Gäste: 6,50 €"
+        },
+        {
+          "symbols": [],
+          "name": "Rindfleischpfanne \"Stroganov Art \" & Spätzle",
+          "allergens": "Allergene: Mi,Sen,Su,Wz",
+          "additives": "Zusatzstoffe: 9,T*",
+          "price": "Studierende: 4,20 € · Bedienstete: 6,20 € · Gäste: 7,60 €"
+        },
+        {
+          "symbols": [],
+          "name": "Hähnchennuggets auf Tomatensauce & Spiralnudeln-Fusilli",
+          "allergens": "Allergene: Wz",
+          "additives": "Zusatzstoffe: 1",
+          "price": "Studierende: 5,20 € · Bedienstete: 7,20 € · Gäste: 8,60 €"
+        }
+      ],
+      "2026-11-10": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Schupfnudelpfanne mit Grünkohl und Pilzen",
+          "allergens": "Allergene: So,Wz",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Brew Bites Paprika-Geschnetzeltes an Gemüse-Couscous",
+          "allergens": "Allergene: Sel,Wz,Gs,Hf",
+          "additives": "",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Lasagne auf \"Bolognese Art \"",
+          "allergens": "Allergene: Ei,Mi,Wz",
+          "additives": "Zusatzstoffe: 1",
+          "price": "Studierende: 5,20 € · Bedienstete: 7,20 € · Gäste: 8,60 €"
+        }
+      ],
+      "2026-11-11": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Asiatische Nudelsuppe",
+          "allergens": "Allergene: Er,So,Sel,Wz",
+          "additives": "Zusatzstoffe: 2,4",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch"
+          ],
+          "name": "Sahne-Milchreis mit Zimt-Apfelmus & Tagesdessert -veg. Johannisbeer Muffin-",
+          "allergens": "Allergene: Mi,Wz",
+          "additives": "Zusatzstoffe: 1,3",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "BBQ-Burger \"Pulled Pork\" mit Krautsalat",
+          "allergens": "Allergene: Sen,Ses,Wz",
+          "additives": "",
+          "price": "Studierende: 4,20 € · Bedienstete: 6,20 € · Gäste: 7,60 €"
+        }
+      ],
+      "2026-11-12": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "3 Röstiecken mit Kaisergemüse dazu Kräutersoße",
+          "allergens": "Allergene: Wz",
+          "additives": "Zusatzstoffe: 1,3",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Kreolisches Chili mit schwarzen Bohnen dazu Naan-Brot & 1 STk. Apfel",
+          "allergens": "Allergene: So,Wz",
+          "additives": "",
+          "price": "Studierende: 2,20 € · Bedienstete: 4,60 € · Gäste: 6,00 €"
+        },
+        {
+          "symbols": [],
+          "name": "goldbraunes Schweineschnitzel an Paprikasauce & Pommes frites",
+          "allergens": "Allergene: Ei,Wz",
+          "additives": "Zusatzstoffe: 1,3",
+          "price": "Studierende: 4,20 € · Bedienstete: 6,20 € · Gäste: 7,60 €"
+        }
+      ],
+      "2026-11-13": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Linsen-Mango-Curry mit Tomaten-Bulgur",
+          "allergens": "Allergene: Wz",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch"
+          ],
+          "name": "2 Stk. Spiegeleier auf Rahmspinat & Kartoffeln",
+          "allergens": "Allergene: Ei,Mi,Wz",
+          "additives": "Zusatzstoffe: 1",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Spaghetti mit Schinken-Carbonara- Sauce & Mischsalat",
+          "allergens": "Allergene: Ei,Mi,Sel,Wz,Ro",
+          "additives": "Zusatzstoffe: 1,2,3,8",
+          "price": "Studierende: 3,70 € · Bedienstete: 5,90 € · Gäste: 7,30 €"
+        }
+      ],
+      "2026-11-14": [],
+      "2026-11-15": [],
+      "2026-11-16": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Champignon-Porree-Gemüse mit Salzkartoffeln",
+          "allergens": "Allergene: Wz,Hf",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Geschnetzeltes in Tomaten-Kräuterrahm & Bauern - Spätzle",
+          "allergens": "Allergene: Ei,Mi,Wz",
+          "additives": "",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch"
+          ],
+          "name": "Blumenkohlschnitzel mit feurigen Ratatouille & Kartoffeln-Drillinge",
+          "allergens": "Allergene: Ei,Mi,Sel,Wz",
+          "additives": "",
+          "price": "Studierende: 3,70 € · Bedienstete: 5,90 € · Gäste: 7,30 €"
+        }
+      ],
+      "2026-11-17": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Rosenkohl-Kartoffelpfanne mit Steckrüben",
+          "allergens": "Allergene: Hf",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch"
+          ],
+          "name": "Kürbis-Süßkartoffeleintopf mit Fladenbrot & Schokopudding",
+          "allergens": "Allergene: Mi,Ses,Wz,Gs",
+          "additives": "",
+          "price": "Studierende: 2,80 € · Bedienstete: 5,10 € · Gäste: 6,50 €"
+        },
+        {
+          "symbols": [],
+          "name": "Gulasch vom Schwein mit Butterbohnen an Petersilienkartoffeln",
+          "allergens": "Allergene: Mi,Sen,Wz",
+          "additives": "",
+          "price": "Studierende: 3,70 € · Bedienstete: 5,90 € · Gäste: 7,30 €"
+        }
+      ],
+      "2026-11-18": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Gemüse-Kichererbsen-Curry Madras Art, dazu Vollkornreis und Apfel-Zwiebel-Koriander Topping",
+          "allergens": "",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Thüringer Bratwurst auf Omas Sauerkraut & Bratkartoffeln",
+          "allergens": "Allergene: Sen",
+          "additives": "Zusatzstoffe: 3,4,8",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch"
+          ],
+          "name": "bunter Halloumi-Burger mit Tomate / Zwiebeln / Salat",
+          "allergens": "Allergene: Mi,Sen,Ses,Wz",
+          "additives": "Zusatzstoffe: 2",
+          "price": "Studierende: 4,20 € · Bedienstete: 6,20 € · Gäste: 7,60 €"
+        }
+      ],
+      "2026-11-19": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Zitronen-Quinoa-Pfanne mit Brokkoli und Mandeln",
+          "allergens": "Allergene: Ma",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Plant based Chicken Pfanne mit Brokkoli & Langkorn - Reis",
+          "allergens": "Allergene: Hf",
+          "additives": "",
+          "price": "Studierende: 2,80 € · Bedienstete: 5,10 € · Gäste: 6,50 €"
+        },
+        {
+          "symbols": [],
+          "name": "Spaghetti \"Milano Art\" mit Ital. Rindfleisch-Bolognese & gerieben Käse",
+          "allergens": "Allergene: Mi,Sel,Wz",
+          "additives": "",
+          "price": "Studierende: 4,20 € · Bedienstete: 6,20 € · Gäste: 7,60 €"
+        }
+      ],
+      "2026-11-20": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Pastinaken - Süßkartoffelsuppe, dazu ¼ Fladenbrot",
+          "allergens": "Allergene: Sel,Ses,Wz,Gs",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "goldbraune Kartoffelpuffer/Reibekuchen mit Apfelmus",
+          "allergens": "Allergene: Su",
+          "additives": "Zusatzstoffe: 3",
+          "price": "Studierende: 2,50 € · Bedienstete: 4,80 € · Gäste: 6,20 €"
+        },
+        {
+          "symbols": [],
+          "name": "geschmorte Wirsingroulade auf Sauce & Kartoffelstampf",
+          "allergens": "Allergene: So,Mi,Sel,Sen,Wz",
+          "additives": "Zusatzstoffe: 1",
+          "price": "Studierende: 3,70 € · Bedienstete: 5,90 € · Gäste: 7,30 €"
+        }
+      ]
+    },
+    "67": {
+      "2026-11-07": [],
+      "2026-11-08": [],
+      "2026-11-09": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Rote Bete-Puffer mit Wurzelgemüse in Meerrettichsauce, dazu Kartoffelpüree",
+          "allergens": "Allergene: So,Sel,Su,Wz,Hf",
+          "additives": "Zusatzstoffe: 1,3",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Hühnerfrikassee mit Mischgemüse und Reis",
+          "allergens": "Allergene: Mi,Wz",
+          "additives": "Zusatzstoffe: 1",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        }
+      ],
+      "2026-11-10": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Schupfnudelpfanne mit Grünkohl und Pilzen",
+          "allergens": "Allergene: So,Wz",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Jägerschnitzel von Jagdwurst , Nudeln , Tomatensoße",
+          "allergens": "Allergene: Ei,Sel,Wz",
+          "additives": "Zusatzstoffe: 2,3,8",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        }
+      ],
+      "2026-11-11": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Gemüsebolognese mit Vollkornspirelli",
+          "allergens": "Allergene: Sel,Wz",
+          "additives": "Zusatzstoffe: 1",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Asiatische Hähnchenpfanne , Reis oder Mie Nudeln",
+          "allergens": "Allergene: So,Wz",
+          "additives": "Zusatzstoffe: 2",
+          "price": "Studierende: 4,20 € · Bedienstete: 6,20 € · Gäste: 7,60 €"
+        }
+      ],
+      "2026-11-12": [
+        {
+          "symbols": [
+            "Vegetarisch"
+          ],
+          "name": "Spätzle mit Käsesoße , Salat",
+          "allergens": "Allergene: Ei,Mi,Wz",
+          "additives": "Zusatzstoffe: 1",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Schlemmerfilet \" Bordelaise\" mit Europagemüse in Kräutersoße und Reis",
+          "allergens": "Allergene: Fi,Mi,Wz",
+          "additives": "Zusatzstoffe: 1",
+          "price": "Studierende: 4,20 € · Bedienstete: 6,20 € · Gäste: 7,60 €"
+        }
+      ],
+      "2026-11-13": [
+        {
+          "symbols": [
+            "Vegetarisch"
+          ],
+          "name": "Waldpilze in Rahmsoße mit Semmelknödelscheiben",
+          "allergens": "Allergene: Ei,So,Mi,Wz",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        }
+      ],
+      "2026-11-14": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Kürbiscremesuppe mit Kokosnussmilch, dazu ein Weizenbrötchen",
+          "allergens": "Allergene: Wz",
+          "additives": "Zusatzstoffe: 2",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [
+            "Vegetarisch"
+          ],
+          "name": "Milchreis, Apfelmus, Zucker/ Zimt",
+          "allergens": "Allergene: Mi",
+          "additives": "Zusatzstoffe: 3",
+          "price": "Studierende: 2,50 € · Bedienstete: 4,80 € · Gäste: 6,20 €"
+        },
+        {
+          "symbols": [],
+          "name": "Spaghetti Bolognese , Reibekäse",
+          "allergens": "Allergene: Mi,Wz",
+          "additives": "",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        }
+      ],
+      "2026-11-15": [],
+      "2026-11-16": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Penne all´arrabiata",
+          "allergens": "Allergene: Wz",
+          "additives": "Zusatzstoffe: 2",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Bratwurst mit Sauerkraut und Kartoffeln",
+          "allergens": "Allergene: So,Mi,Sel,Sen",
+          "additives": "Zusatzstoffe: 3,4,8",
+          "price": "Studierende: 3,70 € · Bedienstete: 5,90 € · Gäste: 7,30 €"
+        }
+      ],
+      "2026-11-17": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Kürbiscremesuppe mit Kokosnussmilch, dazu ein Weizenbrötchen",
+          "allergens": "Allergene: Wz",
+          "additives": "Zusatzstoffe: 2",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Schweinefrikadelle , Rotkohl und Kartoffeln",
+          "allergens": "Allergene: Ei,So,Mi,Sel,Sen,Wz",
+          "additives": "Zusatzstoffe: 9",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        }
+      ],
+      "2026-11-18": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Farfalle mit cremiger Spinat-Tomatensoße",
+          "allergens": "Allergene: Wz",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Hähnchenbrustfilet im Knuspermantel mit Basilikum-Tomaten-Gnocchi",
+          "allergens": "Allergene: Ei,Wz",
+          "additives": "",
+          "price": "Studierende: 4,20 € · Bedienstete: 6,20 € · Gäste: 7,60 €"
+        }
+      ],
+      "2026-11-19": [
+        {
+          "symbols": [
+            "Vegetarisch",
+            "Vegan"
+          ],
+          "name": "Plant-Based Kesselgulasch mit einem Brötchen",
+          "allergens": "Allergene: So,Wz",
+          "additives": "",
+          "price": "Studierende: 2,00 € · Bedienstete: 4,40 € · Gäste: 5,80 €"
+        },
+        {
+          "symbols": [],
+          "name": "Fischstäbchen mit Kräutersoße und Kartoffelstampf , Salatbeilage",
+          "allergens": "Allergene: Ei,Fi,Mi,Wz",
+          "additives": "",
+          "price": "Studierende: 3,20 € · Bedienstete: 5,40 € · Gäste: 6,80 €"
+        }
+      ],
+      "2026-11-20": []
+    }
+  }
+}

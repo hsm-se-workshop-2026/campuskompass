@@ -10,19 +10,20 @@ fachliche manuelle Prüfungen und Abhängigkeiten zu externen APIs.
 
 | Prüfung | Kommando/Aktion | Erwartetes Ergebnis |
 |---|---|---|
-| Python-Syntax | `python -m py_compile .\server.py` | Kein Syntaxfehler |
+| Python-Syntax | `python -m py_compile .\server.py .\scripts\update_mensa_data.py` | Kein Syntaxfehler |
 | JavaScript-Syntax | `node --check .\js\app.js` | Kein Syntaxfehler |
 | JSON-Struktur | `Get-Content .\study-plan.json \| ConvertFrom-Json` | JSON wird erfolgreich gelesen |
+| Mensa-Snapshot | `Get-Content .\mensa-data.json \| ConvertFrom-Json` | Speiseplandaten werden erfolgreich gelesen |
 | Statischer Server | `python .\server.py`, Browser öffnen | Dashboard wird geladen |
-| Mensa-API | OpenMensa-Aufruf im Browser-Netzwerk-Tab prüfen | JSON-Antwort oder verständlicher Nichtverfügbarkeitsstatus |
+| Speiseplan-Update | `python .\scripts\update_mensa_data.py` | Snapshot für beide Mensen und 14 Tage wird erzeugt |
 
 ## Fachliche Prüfungen
 
 1. Ein Datum ohne Termin zeigt den Hinweis „keine Vorlesung oder Klausur“.
 2. Ein Gera-Termin setzt Mensa, Wetter, Route und Fahrplanziel auf Gera.
 3. Ein Schmalkalden-Termin setzt die entsprechenden Schmalkalden-Daten.
-4. Ein Schmalkalden-Termin lädt Mensadaten für OpenMensa-ID 843.
-5. Ein Gera-Termin lädt Mensadaten für OpenMensa-ID 152.
+4. Ein Schmalkalden-Termin lädt Mensadaten aus dem Snapshot für Ressourcen-ID 73.
+5. Ein Gera-Termin lädt Mensadaten aus dem Snapshot für Ressourcen-ID 67.
 6. Ein schneller Datumswechsel zeigt keine verspäteten alten Mensa- oder
    Wetterdaten an.
 7. „Jetzt“ setzt Datum und Uhrzeit auf die Zeitzone Europe/Berlin.
@@ -32,8 +33,8 @@ fachliche manuelle Prüfungen und Abhängigkeiten zu externen APIs.
 
 ## Grenzen
 
-Die externen Dienste OpenMensa, Open-Meteo, Google Maps und VMT können sich
-ändern oder vorübergehend nicht erreichbar sein. Deshalb
+Die externen Dienste Studierendenwerk Thüringen, Open-Meteo, Google Maps und
+VMT können sich ändern oder vorübergehend nicht erreichbar sein. Deshalb
 werden deren Antwortstrukturen im Frontend validiert und Fehler sichtbar
 angezeigt. Eine vollständige End-to-End-Prüfung benötigt Netzwerkzugriff und
 eine laufende Browserumgebung.

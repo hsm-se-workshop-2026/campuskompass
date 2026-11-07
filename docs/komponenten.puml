@@ -9,18 +9,25 @@ actor "Nutzer/in" as User
 package "CampusKompass" {
   component "index.html\nHTML, CSS und JavaScript" as Dashboard
   database "study-plan.json" as StudyPlan
+  database "mensa-data.json\n14-Tage-Snapshot" as MenuData
   folder "campuskompass/assets/\nLogos" as Logos
 }
 
-cloud "OpenMensa API" as Mensa
+cloud "GitHub Actions\nalle 6 Stunden" as Actions
+cloud "Studierendenwerk Thüringen" as Mensa
+cloud "GitHub Pages" as Pages
 cloud "Open-Meteo" as Weather
 cloud "Google Maps" as Maps
 
 User --> Dashboard : öffnet im Browser
 Dashboard --> StudyPlan : liest Termine
+Dashboard --> MenuData : liest Speisepläne
 Dashboard --> Logos : zeigt Logos
-Dashboard --> Mensa : lädt Mensaplan (JSON)
 Dashboard --> Weather : lädt Wetterdaten
 Dashboard --> Maps : erstellt Wegbeschreibung
+Actions --> Mensa : ruft Speisepläne ab
+Actions --> MenuData : erzeugt Snapshot
+Actions --> Pages : veröffentlicht statische Seite
+Pages --> Dashboard : stellt Seite und Daten bereit
 
 @enduml

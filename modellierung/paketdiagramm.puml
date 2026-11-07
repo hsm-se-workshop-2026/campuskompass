@@ -11,22 +11,28 @@ package "CampusKompass" {
 
   package "Daten" {
     database "study-plan.json" as StudyPlan
+    database "mensa-data.json" as MenuData
     folder "assets/\nLogos" as Assets
   }
 }
 
 package "Externe Dienste" {
-  cloud "OpenMensa API" as Mensa
+  cloud "GitHub Actions" as Actions
+  cloud "Studierendenwerk Thüringen" as Mensa
+  cloud "GitHub Pages" as Pages
   cloud "Open-Meteo" as Weather
   cloud "Google Maps" as Maps
   cloud "VMT Fahrplanauskunft" as VMT
 }
 
 Frontend --> StudyPlan : liest
+Frontend --> MenuData : Speiseplan
 Frontend --> Assets : zeigt
-Frontend --> Mensa : Speiseplan (JSON)
 Frontend --> Weather : Wetterdaten
 Frontend --> Maps : Routenkarte
 Frontend --> VMT : Fahrplan-Widget
+Actions --> Mensa : aktualisiert Snapshot
+Actions --> Pages : veröffentlicht
+Pages --> Frontend : statische Dateien
 
 @enduml

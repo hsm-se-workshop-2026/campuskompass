@@ -52,17 +52,17 @@ Fehlermeldung.
 
 **Ziel:** Der Speiseplan der zum Studienort passenden Mensa wird angezeigt.
 
-**Akteure:** Student/in, Browser, OpenMensa
+**Akteure:** Student/in, Browser, GitHub Pages
 **Vorbedingung:** Ein Datum ist ausgewählt.
 
-1. Das Frontend ermittelt die Mensa und ihre OpenMensa-ID.
-2. Das Frontend fragt den Speiseplan für Mensa-ID und Datum direkt über die
-   OpenMensa-API ab.
-3. Das Frontend rendert verfügbare Gerichte, Kategorien, Hinweise und Preise.
+1. Das Frontend ermittelt die Mensa und ihre Ressourcen-ID.
+2. Das Frontend lädt den Speiseplan für den ausgewählten Tag aus
+   `mensa-data.json`.
+3. Das Frontend rendert verfügbare Gerichte, Hinweise und Preise.
 
-**Alternativen:** Fehlt ein OpenMensa-Eintrag oder ein Speiseplan für den Tag,
-zeigt das Dashboard einen entsprechenden Hinweis. Bei einem API-Fehler wird
-eine Fehlermeldung angezeigt.
+**Alternativen:** Liegt das gewählte Datum außerhalb des abgedeckten 14-Tage-
+Zeitraums oder enthält der Snapshot keine Gerichte, zeigt das Dashboard einen
+entsprechenden Hinweis.
 
 **User Story:** CAMPUS-02
 

@@ -21,10 +21,10 @@ Im Kopfbereich werden die Logos der Hochschule Schmalkalden und der Dualen
 Hochschule Gera-Eisenach angezeigt. Die offiziellen Bilddateien liegen lokal
 im Ordner `assets`.
 
-Die Mensa-Speisepläne werden direkt aus der OpenMensa-API geladen. Die Website
-ist statisch und benötigt für den Betrieb keinen Backend-Server. Je nach
-Studienort werden Mensa Blechhammer in Schmalkalden (OpenMensa-ID 843) oder
-Mensa Weg der Freundschaft in Gera (OpenMensa-ID 152) angezeigt.
+Die Speisepläne stammen vom Studierendenwerk Thüringen und werden regelmäßig
+über GitHub Actions abgerufen. Je nach Studienort werden Mensa Blechhammer in
+Schmalkalden oder Mensa Weg der Freundschaft in Gera angezeigt. Die Website
+bleibt statisch und benötigt zur Anzeige keinen Backend-Server.
 Die Datumsauswahl im Dashboard lädt den Speiseplan für den gewählten Tag und
 übernimmt Datum und Abfahrtszeit in das VMT-Fahrplan-Widget. Das Ziel wird
 passend zum Studienort gesetzt; in Schmalkalden ist es „Schmalkalden,
@@ -50,16 +50,30 @@ Falls Port 8000 bereits belegt ist, kann der Server beispielsweise mit
 
 ### Veröffentlichung mit GitHub Pages
 
-1. Lade den gesamten Projektordner in ein GitHub-Repository hoch.
-2. Öffne im Repository **Settings → Pages**.
-3. Wähle **Deploy from a branch**, den Branch `main` und den Ordner
-   `/ (root)`.
-4. Öffne die nach dem Deployment angezeigte GitHub-Pages-Adresse.
+1. Merge den Branch mit diesen Änderungen in den Standard-Branch `main`.
+2. Öffne im Repository **Settings → Pages** und setze **Build and deployment
+   → Source** auf **GitHub Actions**.
+3. Öffne den Tab **Actions** und starte **Refresh menus and publish GitHub
+   Pages** einmal über **Run workflow**.
+4. Öffne die von GitHub Pages angezeigte Website-URL.
 
-Die relativen Verweise auf CSS, JavaScript, Bilder, Studienplandaten, PDF und
-Kalender funktionieren auch in einem GitHub-Pages-Unterpfad. Wetter- und
-Mensa-Daten werden vom Browser direkt über HTTPS von Open-Meteo bzw. OpenMensa
-geladen. Bei externen Diensten ist eine Internetverbindung erforderlich.
+Danach veröffentlicht der Workflow die Seite bei Änderungen an `main`, auf
+manuelle Anforderung und automatisch alle sechs Stunden. Vor jeder
+Veröffentlichung ruft er den offiziellen Speiseplan für beide Mensen ab und
+erzeugt daraus `mensa-data.json`. Die Datei enthält heute und die folgenden
+13 Kalendertage. Innerhalb des abgedeckten Zeitraums zeigt die Anwendung den
+Zeitpunkt des letzten Abrufs; außerhalb wird der verfügbare Datumsbereich
+angezeigt. Der regelmäßige Abruf kann durch GitHub Actions verzögert werden
+und ist nicht mit Echtzeitdaten gleichzusetzen.
+
+Bei lokaler Vorschau kannst du den Snapshot manuell aktualisieren:
+
+```powershell
+python .\scripts\update_mensa_data.py
+```
+
+Wetterdaten werden weiterhin direkt vom Browser bei Open-Meteo abgerufen.
+Mensa-Daten werden als statische Datei von GitHub Pages ausgeliefert.
 
 ### Studienablaufplan
 
@@ -74,8 +88,9 @@ Veranstaltung, Lehrende/r, Ort und Raum. Die PDF liegt ebenfalls im
 Projektordner und kann über „PDF öffnen“ eingesehen werden.
 
 Die angezeigte Mensa richtet sich nach dem Studienort des gewählten Datums.
-Für Veranstaltungen in Gera wird „Mensa Weg der Freundschaft“ (OpenMensa-ID
-152), für Schmalkalden „Mensa Blechhammer“ (OpenMensa-ID 843) geladen.
+Für Veranstaltungen in Gera wird „Mensa Weg der Freundschaft“ (Studierendenwerk-
+Ressourcen-ID 67), für Schmalkalden „Mensa Blechhammer“ (Ressourcen-ID 73)
+geladen.
 Auch die Wetterabfrage nutzt für Gera-Termine Gera als Standort, ansonsten
 Schmalkalden. Open-Meteo stellt Vorhersagen nur bis zu 16 Tage im Voraus
 bereit; für den 10.–13. Dezember 2026 wird der Gera-Standort verwendet,
@@ -92,6 +107,9 @@ offiziellen Plan müssen in dieser JSON-Datei nachgetragen werden.
 - `campuskompass/css/style.css` enthält das zentrale Layout und die responsiven Styles.
 - `campuskompass/js/app.js` steuert die Benutzerinteraktionen und Datenabfragen.
 - `campuskompass/js/campus-context.js` bündelt Campus-, Mensa-, Wetter- und Routenzuordnungen.
+- `campuskompass/mensa-data.json` enthält einen Speiseplan-Snapshot; GitHub Actions erzeugt ihn vor jeder Veröffentlichung neu.
+- `campuskompass/scripts/update_mensa_data.py` liest die Mensapläne vom Studierendenwerk aus.
+- `campuskompass/.github/workflows/pages.yml` aktualisiert die Daten und veröffentlicht die Website.
 - `campuskompass/study-plan.json` enthält die strukturierten Termine.
 - `campuskompass/server.py` startet den lokalen Webserver.
 - `campuskompass/assets/` enthält die Logos.
@@ -101,13 +119,13 @@ offiziellen Plan müssen in dieser JSON-Datei nachgetragen werden.
 1. Die Nutzerin oder der Nutzer wählt ein Datum.
 2. Das JavaScript sucht passende Termine in `study-plan.json`.
 3. Aus dem Studienort werden Mensa, Wetterstandort und Routenziel bestimmt.
-4. Der Mensaplan wird direkt von der OpenMensa-API geladen.
+4. Der Mensaplan wird aus `mensa-data.json` geladen.
 5. Wetterdaten werden von Open-Meteo geladen.
 6. Die Route wird als Google-Maps-Wegbeschreibung angezeigt.
 
-Der Python-Server dient nur der lokalen Vorschau. GitHub Pages stellt die
-gleichen statischen Dateien bereit; für den Mensa-Aufruf ist kein Proxy
-erforderlich.
+Der Python-Server dient nur der lokalen Vorschau. GitHub Pages stellt den
+statischen Inhalt bereit. GitHub Actions aktualisiert vor der Veröffentlichung
+den Mensa-Snapshot über den offiziellen Studierendenwerk-Endpunkt.
 
 ### Fehlerbehandlung und parallele Anfragen
 
@@ -142,11 +160,12 @@ python .\server.py
 
 ### Mensa-Daten
 
-Mensa Blechhammer (ID 843) und Mensa Weg der Freundschaft (ID 152) werden
-über `https://openmensa.org/api/v2/canteens/{id}/days/{date}/meals`
-abgefragt. OpenMensa liefert Gerichte als JSON mit Kategorie, Hinweisen und
-verfügbaren Preisen. Ein HTTP-404 oder eine leere Liste bedeutet, dass für den
-gewählten Tag dort kein Speiseplan verfügbar ist.
+Das Skript `scripts/update_mensa_data.py` ruft den Speiseplan-Endpunkt des
+Studierendenwerks mit den Ressourcen-IDs 73 (Blechhammer) und 67 (Weg der
+Freundschaft) für jeden Tag des 14-Tage-Zeitraums ab. Es extrahiert Gerichte,
+Preise, Allergene, Zusatzstoffe und Kennzeichnungen aus der HTML-Antwort und
+schreibt sie nach `mensa-data.json`. Der GitHub-Actions-Workflow bricht bei
+Abruffehlern ab, statt eine unvollständige Aktualisierung zu veröffentlichen.
 
 ### Prüfung nach Änderungen
 
@@ -154,14 +173,16 @@ Die wichtigsten Dateien können ohne zusätzliche Abhängigkeiten geprüft werde
 
 ```powershell
 python -m py_compile .\server.py
+python -m py_compile .\scripts\update_mensa_data.py
 node --check .\js\app.js
 node --check .\js\campus-context.js
 Get-Content .\study-plan.json | ConvertFrom-Json | Out-Null
+Get-Content .\mensa-data.json | ConvertFrom-Json | Out-Null
 ```
 
-`node --check` prüft ausschließlich die JavaScript-Syntax. Die Funktion der
-externen Dienste hängt weiterhin von Netzwerkzugriff, deren aktueller
-Antwortstruktur und den jeweiligen Verfügbarkeiten ab.
+`node --check` prüft ausschließlich die JavaScript-Syntax. Die Speisepläne
+hängen von der Verfügbarkeit und Struktur der offiziellen Website ab;
+GitHub-Actions-Läufe können sich verzögern.
 
 ## Verzeichnisübersicht
 

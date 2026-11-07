@@ -37,7 +37,7 @@ und ordnet die Daten dem ausgewählten Datum zu.
 
 - Studienplan nach Datum filtern und Termine mit Zeit, Veranstaltung,
   Lehrkraft, Ort und Raum anzeigen
-- Mensaplan des passenden Campus direkt über OpenMensa laden
+- Regelmäßig aktualisierten Mensaplan für beide Mensen anzeigen
 - Wetter für Campus, Datum und Uhrzeit anzeigen
 - Campusabhängiges Ziel für Route und ÖPNV-Fahrplanauskunft setzen
 - Google-Maps-Route aus Startort oder Browserstandort öffnen
@@ -112,12 +112,16 @@ Browser
   |
   +--> index.html / JavaScript
   |       +--> study-plan.json
+  |       +--> mensa-data.json
   |       +--> Open-Meteo
   |       +--> Google Maps
-  |       +--> OpenMensa API
   |
   +--> server.py
           +--> lokale Vorschau statischer Dateien
+
+GitHub Actions (alle 6 Stunden)
+  +--> offizieller Speiseplan des Studierendenwerks Thüringen
+  +--> mensa-data.json --> GitHub Pages
 ```
 
 ---
@@ -130,10 +134,12 @@ Browser
 4. Mensaplan und Wetter werden geladen.
 5. Die Campusroute wird als Wegbeschreibung angezeigt.
 
-Das Dashboard fragt die OpenMensa-API direkt aus dem Browser ab. Für
-Schmalkalden ist die Mensa Blechhammer (ID 843), für Gera die Mensa Weg der
-Freundschaft (ID 152) hinterlegt. Der Python-Server wird nur für die lokale
-Vorschau benötigt, nicht für das Hosting auf GitHub Pages.
+GitHub Actions ruft den offiziellen Speiseplan für die Mensa Blechhammer
+(Ressourcen-ID 73) und die Mensa Weg der Freundschaft (ID 67) alle sechs
+Stunden ab. Die letzten 14 Kalendertage werden als statische JSON-Datei
+veröffentlicht. Der Browser liest nur diese Datei und benötigt für den
+Mensaplan keine direkte API-Verbindung. Der Python-Server dient ausschließlich
+der lokalen Vorschau.
 
 ---
 
@@ -183,14 +189,16 @@ CampusKompass
   +-- Frontend: index.html
   +-- Daten: study-plan.json, assets/
 
-Frontend -> OpenMensa API
+GitHub Actions -> Studierendenwerk Thüringen -> mensa-data.json
+GitHub Pages -> statische Dateien und Speiseplan-Snapshot
+Frontend -> mensa-data.json
 Frontend -> Open-Meteo
 Frontend -> Google Maps
 Frontend -> VMT Fahrplanauskunft
 ```
 
-Das Frontend lädt Mensa- und Wetterdaten direkt von ihren APIs. Studienplan,
-Logos und weitere Dateien werden statisch bereitgestellt.
+Das Frontend lädt den statischen Mensa-Snapshot und den Studienplan von
+GitHub Pages. Wetterdaten werden direkt von Open-Meteo geladen.
 
 Quelle: [`modellierung/paketdiagramm.puml`](../modellierung/paketdiagramm.puml)
 
@@ -230,10 +238,10 @@ und Ergebnisanzeigen.
 ### Durchgeführte Prüfungen
 
 - Python-Syntaxprüfung mit `python -m py_compile .\server.py`
+- Snapshot-Erzeugung und Prüfung beider Mensa-Datenquellen
 - JavaScript-Syntaxprüfung mit `node --check`
 - JSON-Validierung von `study-plan.json`
 - HTTP-Smoke-Test des lokalen Servers
-- Prüfung ungültiger Mensa-IDs mit erwarteter HTTP-400-Antwort
 - VS-Code-Diagnose ohne gemeldete Fehler oder Warnungen
 - Manuelle Prüfung von Datumswechsel, Campuswechsel, Wetterfehlern und
   Standortfreigabe
@@ -248,8 +256,10 @@ aktuellen Antwortstruktur. Das Testkonzept ist in
 - Neue Termine werden ausschließlich in `study-plan.json` gepflegt.
 - Weitere Datenquellen können als eigene Lade- und Renderfunktionen ergänzt
   werden.
-- Weitere OpenMensa-Standorte können durch Hinterlegen ihrer OpenMensa-ID in
+- Weitere Mensen können in `scripts/update_mensa_data.py` und
   `js/campus-context.js` ergänzt werden.
+- Weitere Mensen können über ihre Ressourcen-ID in
+  `scripts/update_mensa_data.py` und `js/campus-context.js` ergänzt werden.
 - Die Frontend-Funktionen können später in klar getrennte Module oder
   Komponenten überführt werden.
 - Automatisierte Browser- und API-Tests können auf dem vorhandenen Testkonzept
