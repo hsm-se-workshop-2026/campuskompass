@@ -16,6 +16,10 @@ const campuses = {
       latitude: campus.latitude,
       longitude: campus.longitude,
     },
+    fuelStations: {
+      latitude: campus.latitude,
+      longitude: campus.longitude,
+    },
     webcam: {
       name: "Schmalkalden",
       imageUrl: "https://webcam.antenne-schmalkalden.de/Grasberg.jpg",
@@ -41,6 +45,10 @@ const campuses = {
     weather: {
       latitude: 50.8775,
       longitude: 12.0823,
+    },
+    fuelStations: {
+      latitude: 50.9036892,
+      longitude: 12.0703215,
     },
     webcam: {
       name: "Gera",

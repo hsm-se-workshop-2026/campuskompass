@@ -12,6 +12,7 @@ package "CampusKompass" {
   package "Daten" {
     database "study-plan.json" as StudyPlan
     database "mensa-data.json" as MenuData
+    database "fuel-stations.json" as FuelData
     folder "assets/\nLogos" as Assets
   }
 }
@@ -19,6 +20,7 @@ package "CampusKompass" {
 package "Externe Dienste" {
   cloud "GitHub Actions" as Actions
   cloud "Studierendenwerk Thüringen" as Mensa
+  cloud "Tankerkönig API" as FuelApi
   cloud "GitHub Pages" as Pages
   cloud "Open-Meteo" as Weather
   cloud "Google Maps" as Maps
@@ -27,11 +29,14 @@ package "Externe Dienste" {
 
 Frontend --> StudyPlan : liest
 Frontend --> MenuData : Speiseplan
+Frontend --> FuelData : Tankstellenpreise
 Frontend --> Assets : zeigt
 Frontend --> Weather : Wetterdaten
 Frontend --> Maps : Routenkarte
 Frontend --> VMT : Fahrplan-Widget
 Actions --> Mensa : aktualisiert Snapshot
+Actions --> FuelApi : ruft Preise mit Secret ab
+Actions --> FuelData : aktualisiert Snapshot
 Actions --> Pages : veröffentlicht
 Pages --> Frontend : statische Dateien
 

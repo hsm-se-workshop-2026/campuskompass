@@ -18,6 +18,7 @@ Die Priorisierung verwendet die MoSCoW-Methode:
 | CAMPUS-04 | Als Student möchte ich eine Route zu meinem Campus planen, damit ich den Anfahrtsweg finde. | **Could have** | Nützliche Ergänzung, aber für die Anzeige des Studienplans nicht erforderlich. | UC-05 |
 | CAMPUS-05 | Als Student möchte ich eine passende Fahrplanauskunft für Datum und Uhrzeit öffnen, damit ich meine Anreise planen kann. | **Could have** | Ergänzt die Campusroute um den öffentlichen Nahverkehr. | UC-06 |
 | CAMPUS-06 | Als Student möchte ich Datum und Uhrzeit auf „Jetzt“ setzen, damit ich schnell die aktuellen Tagesdaten sehe. | **Could have** | Komfortfunktion für die tägliche Nutzung. | UC-07 |
+| CAMPUS-07 | Als Student möchte ich die nächstgelegenen Tankstellen samt Preisen am passenden Campus sehen, damit ich meine Fahrt planen kann. | **Could have** | Nützliche Ergänzung für die Anreise; Preise werden regelmäßig aktualisiert. | UC-08 |
 
 ## Umsetzungsstand
 
@@ -27,6 +28,7 @@ Die Priorisierung verwendet die MoSCoW-Methode:
 | CampusKompass-Mensa | umgesetzt über regelmäßige Snapshot-Erzeugung durch GitHub Actions |
 | CampusKompass-Wetter und Route | umgesetzt im JavaScript des Dashboards |
 | CampusKompass-Fahrplan | umgesetzt als VMT-Widget und externer Link |
+| CampusKompass-Tankstellen | Tankerkönig-Snapshot über GitHub Actions; API-Schlüssel als Repository-Secret |
 | CampusKompass-Use-Cases | dokumentiert in `requirements/usecases.md` |
 
 ## Rückverfolgbarkeit

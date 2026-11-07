@@ -308,6 +308,25 @@
       .study-event time { color: var(--brand); font-size: 12px; font-weight: 750; }
       .study-event strong { display: block; font-size: 13px; line-height: 1.4; }
       .study-event p { margin: 5px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+      .fuel-card { margin-top: 20px; }
+      .fuel-content { padding: 0 24px 20px; }
+      .fuel-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .fuel-station { min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 12px; }
+      .fuel-station-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+      .fuel-station-heading h3 { margin: 0; font-size: 13px; line-height: 1.4; }
+      .fuel-station-brand { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
+      .fuel-open-status { flex: 0 0 auto; padding: 4px 8px; border-radius: 999px; background: #e8f4ec; color: #23623d; font-size: 10px; font-weight: 700; }
+      .fuel-open-status.closed { background: #f3eeee; color: #8a3030; }
+      .fuel-station-address { margin: 8px 0 12px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+      .fuel-prices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .fuel-price { padding: 8px; border-radius: 8px; background: var(--canvas); text-align: center; }
+      .fuel-price span { display: block; color: var(--muted); font-size: 10px; }
+      .fuel-price strong { display: block; margin-top: 4px; font-size: 13px; }
+      .fuel-station-footer { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; font-size: 10px; }
+      .fuel-station-footer a { color: var(--brand); font-weight: 700; text-decoration: none; }
+      .fuel-station-footer a:hover { text-decoration: underline; }
+      .fuel-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; }
+      .fuel-status.error { color: #a22d2d; }
       [hidden] { display: none !important; }
       .route-layout { display: grid; grid-template-columns: minmax(300px, .75fr) 1.25fr; }
       .route-controls { padding: 4px 24px 24px; }
@@ -378,6 +397,8 @@
         .day-planner { align-items: stretch; flex-wrap: wrap; }
         .day-planner-copy { flex-basis: 100%; }
         .study-event { grid-template-columns: 1fr; gap: 5px; }
+        .fuel-list { grid-template-columns: 1fr; }
+        .fuel-footer { align-items: flex-start; flex-direction: column; }
       }
 
       @media (max-width: 520px) {

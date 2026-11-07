@@ -9,9 +9,9 @@ und ordnen die User Stories den beteiligten Akteuren zu.
   Routen- oder Fahrplanabfragen.
 - **Browser**: führt das JavaScript aus und rendert die Oberfläche.
 - **CampusKompass-Server**: liefert Dateien aus und vermittelt den
-  Mensa-Aufruf.
-- **Externe Dienste**: Studierendenwerk Thüringen, Open-Meteo, Google Maps und
-  VMT.
+  lokalen Vorschau-Aufruf.
+- **Externe Dienste**: Studierendenwerk Thüringen, Tankerkönig, Open-Meteo,
+  Google Maps und VMT.
 
 ## UC-01 – Dashboard öffnen
 
@@ -41,6 +41,7 @@ geladen werden.
 3. Die Termine werden nach Uhrzeit sortiert.
 4. Uhrzeit, Veranstaltung, Lehrkraft, Ort und Raum werden angezeigt.
 5. Aus dem Studienort werden Mensa, Wetterstandort und Routenziel abgeleitet.
+   Der passende Tankstellen-Snapshot wird ebenfalls anhand des Campus gewählt.
 
 **Alternativen:** Für ein Datum ohne Termine wird ein entsprechender Hinweis
 angezeigt. Bei ungültigen oder nicht ladbaren JSON-Daten erscheint eine
@@ -125,3 +126,27 @@ Hinweis angezeigt.
 3. Studienplan, Mensaplan, Wetter, Route und Fahrplan werden aktualisiert.
 
 **User Story:** CAMPUS-06
+
+## UC-08 – Tankstellenpreise anzeigen
+
+**Ziel:** Die nächstgelegenen Tankstellen samt aktuellen verfügbaren Preisen
+für den passenden Campus werden angezeigt.
+
+**Akteure:** Student/in, Browser und GitHub Pages
+**Vorbedingung:** Das Dashboard ist geöffnet und der Tankstellen-Snapshot
+verfügbar.
+
+1. Das Frontend ermittelt anhand des Studienorts den passenden Campus.
+2. Es lädt die Tankstellenliste dieses Campus aus `fuel-stations.json`.
+3. Tankstellen mit E5-, E10- und Dieselpreis, Öffnungsstatus und Entfernung
+   werden angezeigt.
+4. Der Student kann eine Station auf einer Karte öffnen.
+
+**Alternativen:** Sind keine Daten vorhanden oder ist der Snapshot älter als
+45 Minuten, zeigt die Oberfläche einen entsprechenden Hinweis.
+
+**Datenaktualisierung:** GitHub Actions fragt die Tankerkönig-API regelmäßig
+mit dem Secret `TANKERKOENIG_API_KEY` ab. Der API-Schlüssel wird nicht in den
+öffentlichen Snapshot geschrieben.
+
+**User Story:** CAMPUS-07
