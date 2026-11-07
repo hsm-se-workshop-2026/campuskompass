@@ -1,0 +1,542 @@
+[
+  {
+    "dates": ["2025-11-07"],
+    "time": "08:30–09:00",
+    "title": "Begrüßung",
+    "lecturer": "Prof. Bachmann",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2025-11-07"],
+    "time": "09:00–17:00",
+    "title": "Systemtheorie",
+    "lecturer": "Prof. Dr. Silvio Bachmann",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2025-11-08", "2025-11-09"],
+    "time": "08:00–16:30",
+    "title": "Systemtheorie",
+    "lecturer": "Prof. Dr. Silvio Bachmann",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2025-12-12"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Systemtheorie",
+    "lecturer": "Prof. Dr. Silvio Bachmann",
+    "location": "Schmalkalden",
+    "room": "H 0103",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2025-12-12"],
+    "time": "10:30–18:00",
+    "title": "Angewandte Mathematik",
+    "lecturer": "Prof. Dr. Eckhard Schulz",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2025-12-13", "2025-12-14"],
+    "time": "08:30–16:30",
+    "title": "Angewandte Mathematik",
+    "lecturer": "Prof. Dr. Eckhard Schulz",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-02-05"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Angewandte Mathematik",
+    "lecturer": "Prof. Dr. Eckhard Schulz",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2026-02-05"],
+    "time": "10:30–18:00",
+    "title": "Betriebswirtschaftslehre",
+    "lecturer": "Prof. Dr. Hubert Dechant",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-02-06"],
+    "time": "09:30–17:30",
+    "title": "Betriebswirtschaftslehre",
+    "lecturer": "Prof. Dr. Andreas Müller",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-02-07", "2026-02-08"],
+    "time": "08:30–16:30",
+    "title": "Betriebswirtschaftslehre",
+    "lecturer": "Prof. Dr. Walter Blancke",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-03-13"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Betriebswirtschaftslehre",
+    "lecturer": "Prof. Dr. Walter Blancke / Prof. Dr. Hubert Dechant / Prof. Dr. Andreas Müller",
+    "location": "Gera",
+    "room": "B 6",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2026-03-13"],
+    "time": "10:30–18:00",
+    "title": "Modellbildung",
+    "lecturer": "Prof. Dr. Mario Koch",
+    "location": "Gera",
+    "room": "CIM-Labor (B 22)",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-03-14"],
+    "time": "08:30–16:30",
+    "title": "Modellbildung",
+    "lecturer": "Prof. Dr. Mario Koch",
+    "location": "Gera",
+    "room": "B 8",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-03-15"],
+    "time": "08:30–16:30",
+    "title": "Modellbildung",
+    "lecturer": "Prof. Dr. Mario Koch",
+    "location": "Gera",
+    "room": "CIM-Labor (B 22)",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-05-06"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Modellbildung",
+    "lecturer": "Prof. Dr. Mario Koch",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2026-05-06"],
+    "time": "10:30–17:00",
+    "title": "Innovationsmanagement",
+    "lecturer": "Prof. Dr. Hubert Dechant",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-05-07", "2026-05-08", "2026-05-09", "2026-05-10"],
+    "time": "08:30–16:30",
+    "title": "Projektmanagement",
+    "lecturer": "Prof. Dr. Uwe Straubel",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-05-27"],
+    "time": "18:00–21:00",
+    "title": "Innovationsmanagement – Teil 1",
+    "lecturer": "Dipl.-Ing. Horst Nähler (TRIZ-Akademie)",
+    "location": "Online",
+    "room": "BBB",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-06-01"],
+    "time": "18:00–21:00",
+    "title": "Innovationsmanagement – Teil 2",
+    "lecturer": "Dipl.-Ing. Horst Nähler (TRIZ-Akademie)",
+    "location": "Online",
+    "room": "BBB",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-06-19"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Projektmanagement",
+    "lecturer": "Prof. Dr. Uwe Straubel",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2026-06-19"],
+    "time": "10:30–18:00",
+    "title": "Innovationsmanagement",
+    "lecturer": "Dr. Martin Wirtz",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-06-20"],
+    "time": "08:30–16:30",
+    "title": "Innovationsmanagement",
+    "lecturer": "Prof. Dr. Hubert Dechant",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-07-23"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Innovationsmanagement",
+    "lecturer": "Prof. Dr. Hubert Dechant / Dr. Martin Wirtz / Dipl.-Ing. Horst Nähler",
+    "location": "Schmalkalden",
+    "room": "H 0001",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2026-07-23"],
+    "time": "10:30–18:00",
+    "title": "Wirtschaftsrecht",
+    "lecturer": "Prof. Dr. Rainer Schackmar",
+    "location": "Schmalkalden",
+    "room": "H 0001",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-07-24"],
+    "time": "08:30–16:30",
+    "title": "Wirtschaftsrecht",
+    "lecturer": "Prof. Dr. Rainer Schackmar",
+    "location": "Schmalkalden",
+    "room": "H 0003",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-07-25"],
+    "time": "08:30–16:30",
+    "title": "Wirtschaftsrecht",
+    "lecturer": "Prof. Dr. Manfred Herbert",
+    "location": "Schmalkalden",
+    "room": "H 0001",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-07-26"],
+    "time": "08:30–16:30",
+    "title": "Wirtschaftsrecht",
+    "lecturer": "Prof. Dr. Wojciech Lisiewicz",
+    "location": "Schmalkalden",
+    "room": "H 0001",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-09-10"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Wirtschaftsrecht",
+    "lecturer": "Prof. Dr. Rainer Schackmar / Prof. Dr. Wojciech Lisiewicz / Prof. Dr. Manfred Herbert",
+    "location": "Schmalkalden",
+    "room": "H 0111",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2026-09-10"],
+    "time": "10:30–18:00",
+    "title": "Embedded Systems",
+    "lecturer": "Prof. Dr. Jürgen Kelber",
+    "location": "Schmalkalden",
+    "room": "H 0111",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-09-11"],
+    "time": "08:30–16:30",
+    "title": "Embedded Systems",
+    "lecturer": "Prof. Dr. Andreas Wenzel",
+    "location": "Schmalkalden",
+    "room": "H 0111",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-09-12"],
+    "time": "08:30–16:30",
+    "title": "Embedded Systems",
+    "lecturer": "Prof. Dr. Jürgen Kelber",
+    "location": "Schmalkalden",
+    "room": "H 0111",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-09-13"],
+    "time": "08:30–16:30",
+    "title": "Embedded Systems",
+    "lecturer": "Prof. Dr. Andreas Wenzel",
+    "location": "Schmalkalden",
+    "room": "H 0111",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-11-05"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Embedded Systems",
+    "lecturer": "Prof. Dr. Jürgen Kelber / Prof. Dr. Andreas Wenzel",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2026-11-05"],
+    "time": "10:30–18:00",
+    "title": "Software Engineering",
+    "lecturer": "Jun.-Prof. Dr. Christoph Menz",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-11-06", "2026-11-07", "2026-11-08"],
+    "time": "08:30–16:30",
+    "title": "Software Engineering",
+    "lecturer": "Jun.-Prof. Dr. Christoph Menz",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-12-10"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Software Engineering",
+    "lecturer": "Jun.-Prof. Dr. Christoph Menz",
+    "location": "Gera",
+    "room": "Hörsaal",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2026-12-10"],
+    "time": "10:30–18:00",
+    "title": "Elektromagnetische Verträglichkeit",
+    "lecturer": "Prof. Dr. Reinhardt Liebold",
+    "location": "Gera",
+    "room": "ET-Labor",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2026-12-11", "2026-12-12", "2026-12-13"],
+    "time": "08:30–16:30",
+    "title": "Elektromagnetische Verträglichkeit",
+    "lecturer": "Prof. Dr. Reinhardt Liebold",
+    "location": "Gera",
+    "room": "ET-Labor",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-01-29"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Elektromagnetische Verträglichkeit",
+    "lecturer": "Prof. Dr. Reinhardt Liebold",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2027-01-29"],
+    "time": "10:30–18:00",
+    "title": "Antriebssysteme / Robotik (Wahlpflichtfach)",
+    "lecturer": "Prof. Dr. Frank Schrödel",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-01-30"],
+    "time": "08:30–16:30",
+    "title": "Antriebssysteme / Robotik",
+    "lecturer": "Prof. Dr. Frank Schrödel / Dipl.-Ing. (FH) Christoph Schreiber",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-01-31"],
+    "time": "08:30–16:30",
+    "title": "Antriebssysteme / Robotik",
+    "lecturer": "Dipl.-Ing. (FH) Christoph Schreiber",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-02-26"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Antriebssysteme / Robotik",
+    "lecturer": "Prof. Dr. Frank Schrödel / Dipl.-Ing. (FH) Christoph Schreiber",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2027-02-26"],
+    "time": "10:30–18:00",
+    "title": "Angewandte Bildverarbeitung (Wahlpflichtfach)",
+    "lecturer": "Prof. Dr. Maria Schweigel",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-02-27", "2027-02-28"],
+    "time": "08:30–16:30",
+    "title": "Angewandte Bildverarbeitung",
+    "lecturer": "Prof. Dr. Maria Schweigel",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-04-09"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Angewandte Bildverarbeitung",
+    "lecturer": "Prof. Dr. Maria Schweigel",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2027-04-09"],
+    "time": "10:30–18:00",
+    "title": "Elektroenergiesysteme",
+    "lecturer": "Prof. Dr. Irina Konotop",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-04-10"],
+    "time": "08:00–16:00",
+    "title": "Elektroenergiesysteme",
+    "lecturer": "Prof. Dr. Irina Konotop",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-04-11"],
+    "time": "08:00–16:00",
+    "title": "Elektroenergiesysteme",
+    "lecturer": "Prof. Dr. Irina Konotop",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-05-21"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Elektroenergiesysteme",
+    "lecturer": "Prof. Dr. Irina Konotop",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2027-05-21"],
+    "time": "10:30–18:00",
+    "title": "Leistungselektronik (Wahlpflichtfach)",
+    "lecturer": "Prof. Dr. Ralf Kramer",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-05-22", "2027-05-23"],
+    "time": "08:30–16:30",
+    "title": "Leistungselektronik",
+    "lecturer": "Prof. Dr. Ralf Kramer",
+    "location": "Schmalkalden",
+    "room": "H 0211",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-06-18"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Leistungselektronik",
+    "lecturer": "Prof. Dr. Ralf Kramer",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2027-06-18"],
+    "time": "10:30–18:00",
+    "title": "Künstliche Intelligenz in der Automatisierung (Wahlpflichtfach)",
+    "lecturer": "Prof. Dr. Silvio Bachmann",
+    "location": "Schmalkalden",
+    "room": "B 0423",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-06-19"],
+    "time": "08:30–16:30",
+    "title": "Künstliche Intelligenz in der Automatisierung",
+    "lecturer": "Prof. Dr. Silvio Bachmann / Prof. Dr. Christian Döbel",
+    "location": "Schmalkalden",
+    "room": "B 0423",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-06-20"],
+    "time": "08:30–16:30",
+    "title": "Künstliche Intelligenz in der Automatisierung",
+    "lecturer": "Prof. Dr. Christian Döbel",
+    "location": "Schmalkalden",
+    "room": "B 0423",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-07-16"],
+    "time": "08:30–10:00",
+    "title": "Klausur: Künstliche Intelligenz in der Automatisierung",
+    "lecturer": "Prof. Dr. Silvio Bachmann / Prof. Dr. Christian Döbel",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Klausur"
+  },
+  {
+    "dates": ["2027-07-16"],
+    "time": "10:30–18:00",
+    "title": "Power Quality (Wahlpflichtfach)",
+    "lecturer": "Prof. Dr. Irina Konotop",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-07-17", "2027-07-18"],
+    "time": "08:30–16:30",
+    "title": "Power Quality",
+    "lecturer": "Prof. Dr. Irina Konotop",
+    "location": "Schmalkalden",
+    "room": "H 0212",
+    "type": "Vorlesung"
+  },
+  {
+    "dates": ["2027-08-28"],
+    "time": "10:00–11:30",
+    "title": "Klausur: Power Quality",
+    "lecturer": "Prof. Dr. Irina Konotop",
+    "location": "Schmalkalden",
+    "room": "H 0203",
+    "type": "Klausur"
+  }
+]
