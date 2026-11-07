@@ -1,73 +1,10 @@
 # Projektdokumentation
 
-Das Projekt enthält zwei Anwendungen:
+Das Projekt besteht aus dem lokalen Webdashboard **CampusKompass** für
+Studierende. Es bündelt Studienplan, Mensaplan, Wetterinformationen sowie
+Anreise- und Campusinformationen in einer browserbasierten Oberfläche.
 
-1. einen Python-GPX-Visualizer für Wanderungen,
-2. das lokale Webdashboard **CampusKompass** für Studierende.
-
-Die Anwendungen sind unabhängig voneinander und besitzen jeweils einen
-eigenen Startpunkt.
-
-## 1. GPX-Visualizer
-
-### Zweck
-
-Der GPX-Visualizer liest eine GPX-Datei ein und stellt eine Wanderung
-grafisch dar. Die Standarddatei ist `assets/Wanderung.gpx`.
-
-### Ablauf
-
-1. `src/main.py` ruft `GpxTrack.from_gpx(...)` auf.
-2. `src/model/track.py` liest die XML-Datei und erzeugt für jeden Trackpunkt
-   ein `GeoPoint`-Objekt.
-3. Die Punkte werden in einer `Route` gesammelt.
-4. `main.py` berechnet daraus Entfernung, Zeit, Höhenmeter und
-   Durchschnittsgeschwindigkeit.
-5. Matplotlib zeigt eine 2D-Karte, ein Höhenprofil und einen Strecken-Slider.
-6. Über **3D Ansicht** kann die Route mit der Höhe als dritter Dimension
-   angezeigt werden.
-
-### Wichtige Klassen und Funktionen
-
-| Datei | Element | Aufgabe |
-|---|---|---|
-| `src/model/track.py` | `GeoPoint` | Speichert Breiten- und Längengrad, Höhe und Zeitstempel. |
-| `src/model/track.py` | `Route` | Enthält die Punkte einer Route. |
-| `src/model/track.py` | `GpxTrack` | Liest eine GPX-Datei und erstellt eine Route. |
-| `src/main.py` | `haversine_m` | Berechnet die Entfernung zwischen zwei GPS-Punkten. |
-| `src/main.py` | `compute_statistics` | Berechnet Gesamtstrecke, Zeit, Höhenmeter und Geschwindigkeit. |
-| `src/main.py` | `main` | Erstellt die Matplotlib-Oberfläche. |
-
-### Darstellung
-
-- Die GPS-Koordinaten werden näherungsweise in Web Mercator (EPSG:3857)
-  umgerechnet.
-- `contextily` lädt eine Hintergrundkarte.
-- Der obere Bereich zeigt die Route und Gesamtstatistiken.
-- Der untere Bereich zeigt das Höhenprofil.
-- Der gelbe Marker folgt beim Bewegen des Sliders der Route.
-- Fehlende Höhenwerte werden für die Darstellung als `0.0` behandelt.
-
-### Start
-
-Im Projektordner:
-
-```powershell
-python .\src\main.py
-```
-
-Der GPX-Visualizer benötigt unter anderem `matplotlib` und `contextily`.
-Die verwendete GPX-Datei muss relativ zum Projektordner unter
-`assets/Wanderung.gpx` vorhanden sein.
-
-### Bekannte Grenzen
-
-`Route.get_distance`, `Statistics.calculate` und
-`HeightProfile.get_gradient` in `src/model/` sind derzeit Platzhalter.
-Die aktuell verwendeten Gesamtstatistiken werden direkt in `src/main.py`
-berechnet.
-
-## 2. CampusKompass
+## CampusKompass
 
 ### Zweck
 
@@ -223,13 +160,13 @@ Antwortstruktur und den jeweiligen Verfügbarkeiten ab.
 ## Verzeichnisübersicht
 
 ```text
-assets/              GPX- und Höhendaten
-campuskompass/       Webdashboard und lokaler Server
+assets/              Logos der beteiligten Hochschulen
 docs/                Projektdokumentation und PlantUML
-modellierung/        weitere UML-Entwürfe
-src/                 GPX-Visualizer und Datenmodell
+modellierung/        UML-Entwürfe
 requirements/        Anforderungen und User Stories
-tools/               zusätzliche Werkzeuge
+css/, js/            Oberfläche und Campuslogik
+server.py            lokaler Webserver und Mensa-Proxy
+index.html           Dashboard-Oberfläche
 ```
 
 ## Diagramm

@@ -45,53 +45,12 @@ und ordnet die Daten dem ausgewählten Datum zu.
 
 ---
 
-## Projekt auf einen Blick
+## CampusKompass auf einen Blick
 
-- **GPX-Visualizer**: Wanderungen aus GPX-Dateien auswerten
-- **CampusKompass**: Studienplan, Mensa, Wetter und Campusroute bündeln
-- Zwei unabhängige Anwendungen in einem Repository
-- Python für Analyse und Server
-- Matplotlib bzw. HTML/CSS/JavaScript für die Darstellung
-
----
-
-## GPX-Visualizer: Datenfluss
-
-```text
-Wanderung.gpx
-      |
-      v
-GpxTrack.from_gpx()
-      |
-      v
-GeoPoint -> Route -> Statistikberechnung
-      |
-      v
-2D-Karte + Höhenprofil + Slider + 3D-Ansicht
-```
-
----
-
-## GPX-Visualizer: wichtige Bausteine
-
-- `GeoPoint`: GPS-Koordinate, Höhe und Zeitstempel
-- `Route`: Sammlung der Trackpunkte
-- `GpxTrack`: liest die GPX-XML-Datei
-- `haversine_m`: berechnet Entfernungen
-- `compute_statistics`: berechnet Strecke, Dauer, Höhenmeter und Tempo
-- Matplotlib: Diagramme und Interaktion
-- Contextily: Kartenhintergrund
-
----
-
-## GPX-Visualizer: Benutzeroberfläche
-
-- Route mit Start- und Zielmarkierung
-- Karten-Overlay in Web Mercator
-- Gesamtstatistiken im Kartenbereich
-- Höhenprofil über die Entfernung
-- Slider verschiebt den aktuellen Positionsmarker
-- Umschaltung zwischen 2D- und 3D-Ansicht
+- Lokales Webdashboard für Studierende
+- Studienplan, Mensaplan, Wetter und Campusroute in einer Oberfläche
+- Frontend mit HTML, CSS und JavaScript
+- Python-Server für statische Dateien und den Mensa-Proxy
 
 ---
 
@@ -137,10 +96,10 @@ Die MoSCoW-Methode priorisiert Anforderungen nach ihrer Bedeutung für das MVP:
 
 | Priorität | Beispiele |
 |---|---|
-| Must have | GPX importieren und 2D anzeigen; Studienplan für ein Datum |
-| Should have | Höhenprofil und Karten-Overlay; Mensaplan und Wetter |
-| Could have | Interaktive 3D-Ansicht; Campusroute und Fahrplanauskunft |
-| Won't have | Mehrere GPX-Dateien gleichzeitig vergleichen |
+| Must have | Studienplan für ein Datum anzeigen |
+| Should have | Mensaplan und Wetter am passenden Campus |
+| Could have | Campusroute und Fahrplanauskunft |
+| Won't have | Nicht priorisierte Erweiterungen in dieser Version |
 
 ---
 
@@ -304,23 +263,13 @@ die Auswirkungen zukünftiger Änderungen.
 
 ## Qualitäts- und Umsetzungsstand
 
-- GPX-Import und zentrale Visualisierung sind vorhanden.
-- Statistiken werden aktuell direkt in `src/main.py` berechnet.
-- Einige Modellmethoden in `src/model/analysis.py` sind noch vorbereitet,
-  aber nicht vollständig implementiert.
 - CampusKompass wird mit `python .\campuskompass\server.py` gestartet.
-- Die Anwendungen benötigen für externe Karten-, Wetter- und Mensadaten eine
+- Die externen Karten-, Wetter- und Mensadienste benötigen eine
   Netzwerkverbindung.
 
 ---
 
 ## Start der Anwendungen
-
-### GPX-Visualizer
-
-```powershell
-python .\src\main.py
-```
 
 ### CampusKompass
 
@@ -335,9 +284,7 @@ Danach: <http://127.0.0.1:8000/>
 
 ## Fazit
 
-- Das Projekt verbindet Datenmodell, Analyse und Visualisierung.
-- Der GPX-Visualizer unterstützt die technische Routenauswertung.
 - CampusKompass bündelt studienbezogene Informationen in einer Weboberfläche.
 - Die MoSCoW-Priorisierung trennt MVP-Funktionen von Erweiterungen.
-- Nächster sinnvoller Ausbau: mehrere GPX-Dateien und vollständige
-  Modell-Analysefunktionen.
+- Nächste Ausbaustufen sind zusätzliche Standorte, Datenquellen und
+  automatisierte Browser-Tests.

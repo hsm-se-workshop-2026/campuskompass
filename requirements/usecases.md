@@ -128,16 +128,3 @@ Hinweis angezeigt.
 
 **User Story:** CAMPUS-06
 
-## GPX-Use-Cases
-
-Die User Stories des GPX-Visualizers werden analog durch folgende Abläufe
-abgedeckt:
-
-| ID | Ablauf |
-|---|---|
-| UC-GPX-01 | GPX-Datei einlesen und Trackpunkte erzeugen |
-| UC-GPX-02 | Route in 2D mit Start, Ziel und Kartenhintergrund darstellen |
-| UC-GPX-03 | Strecke, Dauer, Höhenmeter und Geschwindigkeit berechnen |
-| UC-GPX-04 | Höhenprofil aus den Trackdaten anzeigen |
-| UC-GPX-05 | Position über den Strecken-Slider verfolgen |
-| UC-GPX-06 | Route in einer 3D-Ansicht darstellen |
