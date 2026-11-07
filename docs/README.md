@@ -134,7 +134,10 @@ offiziellen Plan müssen in dieser JSON-Datei nachgetragen werden.
 
 ### Aufbau
 
-- `campuskompass/index.html` enthält Oberfläche, CSS und JavaScript.
+- `campuskompass/index.html` enthält die HTML-Struktur der Oberfläche.
+- `campuskompass/css/style.css` enthält das zentrale Layout und die responsiven Styles.
+- `campuskompass/js/app.js` steuert die Benutzerinteraktionen und Datenabfragen.
+- `campuskompass/js/campus-context.js` bündelt Campus-, Mensa-, Wetter- und Routenzuordnungen.
 - `campuskompass/study-plan.json` enthält die strukturierten Termine.
 - `campuskompass/server.py` startet den lokalen Webserver.
 - `campuskompass/assets/` enthält die Logos.
