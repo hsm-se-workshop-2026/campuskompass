@@ -31,6 +31,19 @@ Falls Port 8000 bereits belegt ist, kann der Server beispielsweise mit
 `PORT=8001 python3 server.py` gestartet werden; dann `http://127.0.0.1:8001/`
 öffnen.
 
+## Kalenderdatei
+
+`studienablaufplan.ics` enthält alle Termine aus `study-plan.json` und kann in
+iOS-Kalender oder Outlook importiert werden. Die Datei kann über „Kalender
+herunterladen“ im Studienplan-Bereich des Dashboards heruntergeladen werden.
+Zum Aktualisieren nach Änderungen am Studienplan im Projektordner
+`python3 export_calendar.py` ausführen.
+
+Für iOS die `.ics`-Datei auf das iPhone übertragen (zum Beispiel über AirDrop,
+Mail oder iCloud Drive), in „Dateien“ öffnen und alle Termine zum Kalender
+hinzufügen. In Outlook im Kalender „Kalender hinzufügen“ und „Aus Datei
+hochladen“ wählen, dann die `.ics`-Datei auswählen.
+
 ## Studienablaufplan
 
 Der Abschnitt „Dein Studienplan für den Tag“ filtert die aus der PDF

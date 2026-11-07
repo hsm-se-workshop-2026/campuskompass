@@ -271,6 +271,7 @@
       .train-footer a { color: var(--brand); font-weight: 700; text-decoration: none; }
       .train-footer a:hover { text-decoration: underline; }
       .study-card { grid-column: 1 / -1; }
+      .study-downloads { display: flex; align-items: center; gap: 14px; }
       .study-content { padding: 0 24px 22px; }
       .study-note { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
       .card-heading > a.status { text-decoration: none; }
@@ -481,7 +482,10 @@
               <h2 id="study-title">Dein Studienplan für den Tag</h2>
               <p>Lehrveranstaltungen aus dem Studienablaufplan Elektrotechnik und Management</p>
             </div>
-            <a class="status" href="./Studienablaufplanung_ELT2526_050926.pdf" target="_blank" rel="noreferrer">PDF öffnen ↗</a>
+            <div class="study-downloads">
+              <a class="status" href="./studienablaufplan.ics" download="studienablaufplan.ics">Kalender herunterladen ↓</a>
+              <a class="status" href="./Studienablaufplanung_ELT2526_050926.pdf" target="_blank" rel="noreferrer">PDF öffnen ↗</a>
+            </div>
           </div>
           <div class="study-content">
             <p class="study-note">Ausgewähltes Datum: <strong id="study-plan-date"></strong></p>
