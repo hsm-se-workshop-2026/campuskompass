@@ -1,8 +1,9 @@
-@startuml
+@startuml klassendiagramm_frontend
 title Klassendiagramm CampusKompass – Frontend
 
 skinparam classAttributeIconSize 0
 skinparam shadowing false
+skinparam backgroundColor white
 
 class CampusDashboard <<index.html / JavaScript>> {
   -studyPlanSessions: StudySession[]
