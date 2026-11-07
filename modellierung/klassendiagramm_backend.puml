@@ -1,0 +1,52 @@
+@startuml
+title Klassendiagramm CampusKompass – Backend
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+class SimpleHTTPRequestHandler <<http.server>> {
+  +do_GET()
+}
+
+class DashboardHandler {
+  -directory: str
+  +__init__(*args, **kwargs)
+  +do_GET()
+}
+
+class ThreadingHTTPServer <<http.server>> {
+  +serve_forever()
+  +server_close()
+}
+
+class "server.py" as ServerModule <<module>> {
+  HOST: str
+  PORT: int
+  UPSTREAM_URL: str
+  MENSA_RESOURCES: set[str]
+  +main()
+}
+
+class Request <<urllib.request>> {
+  +url: str
+  +data: bytes
+  +headers: dict
+  +method: str
+}
+
+class "Studierendenwerk Thüringen" as Mensa <<external service>>
+
+DashboardHandler --|> SimpleHTTPRequestHandler
+ServerModule ..> DashboardHandler : erzeugt
+ServerModule ..> ThreadingHTTPServer : startet
+DashboardHandler ..> Request : erstellt POST-Anfrage
+DashboardHandler ..> Mensa : ruft Speiseplan ab
+ThreadingHTTPServer o-- DashboardHandler : verarbeitet Requests
+
+note right of DashboardHandler
+  Statische Dateien werden aus dem
+  Projektverzeichnis ausgeliefert.
+  /api/mensa wird validiert und
+  an den externen Dienst weitergeleitet.
+end note
+@enduml

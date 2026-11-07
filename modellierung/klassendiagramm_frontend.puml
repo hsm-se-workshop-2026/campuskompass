@@ -1,0 +1,69 @@
+@startuml
+title Klassendiagramm CampusKompass – Frontend
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+class CampusDashboard <<index.html / JavaScript>> {
+  -studyPlanSessions: StudySession[]
+  -studyPlanLoadError: string
+  -lastRouteOrigin: string
+  -weatherRequestId: number
+  +updateClock()
+  +getSelectedDate(): string
+  +renderStudyPlan(selectedDate)
+  +loadStudyPlan()
+  +loadWeather()
+  +loadMenu()
+  +updatePlanDate()
+  +updateRouteDestination()
+  +showRoute(origin)
+}
+
+class StudySession <<study-plan.json>> {
+  +dates: string[]
+  +time: string
+  +title: string
+  +type: string
+  +lecturer: string
+  +location: string
+  +room: string
+}
+
+class Mensa {
+  +name: string
+  +resourceId: string
+}
+
+class Meal {
+  +name: string
+  +price: string
+  +allergens: string
+  +additives: string
+  +symbols: string[]
+}
+
+class WeatherData <<Open-Meteo>> {
+  +temperature: number
+  +precipitation: number
+  +windSpeed: number
+}
+
+class RouteDestination <<Google Maps>> {
+  +label: string
+  +address: string
+}
+
+CampusDashboard "1" o-- "*" StudySession : lädt und filtert
+CampusDashboard ..> Mensa : ermittelt für Datum
+CampusDashboard ..> Meal : erzeugt aus HTML
+CampusDashboard ..> WeatherData : lädt und rendert
+CampusDashboard ..> RouteDestination : ermittelt
+
+note right of CampusDashboard
+  Das Frontend ist als prozedurales
+  JavaScript-Modul umgesetzt.
+  Die Klasse bündelt die Funktionen
+  zur Dokumentation der Zuständigkeiten.
+end note
+@enduml
