@@ -1,3 +1,9 @@
+"""Lokaler Webserver für das CampusKompass-Dashboard.
+
+Der Mensaplan wird über diesen Server vermittelt, damit der Browser die
+Cross-Origin-Beschränkung der externen Quelle nicht direkt umgehen muss.
+"""
+
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from datetime import date
 import os
@@ -15,16 +21,20 @@ MENSA_RESOURCES = {"67", "73"}
 
 
 class DashboardHandler(SimpleHTTPRequestHandler):
+    """Liefert Dashboard-Dateien aus und vermittelt Mensa-Anfragen."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(PROJECT_DIR), **kwargs)
 
     def do_GET(self):
+        """Bearbeitet statische GET-Anfragen und den Mensa-Proxy."""
         parsed_path = urlsplit(self.path)
         if parsed_path.path != "/api/mensa":
             return super().do_GET()
 
-        requested_date = parse_qs(parsed_path.query).get("date", [""])[0]
-        resource_id = parse_qs(parsed_path.query).get("resource_id", ["73"])[0]
+        query = parse_qs(parsed_path.query)
+        requested_date = query.get("date", [""])[0]
+        resource_id = query.get("resource_id", ["73"])[0]
         if resource_id not in MENSA_RESOURCES:
             self.send_error(400, "Unbekannte Mensa.")
             return
@@ -67,6 +77,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
 
 def main():
+    """Startet den lokalen Server und fährt ihn kontrolliert herunter."""
     server = ThreadingHTTPServer((HOST, PORT), DashboardHandler)
     print(f"Campus-Dashboard läuft unter http://{HOST}:{PORT}/")
     try:

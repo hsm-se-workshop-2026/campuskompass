@@ -1,3 +1,4 @@
+// Zentrale Zuordnung der Termine zu Campus, Mensa, Wetterdaten und Routenziel.
 const campus = {
   latitude: 50.72,
   longitude: 10.45,
@@ -19,6 +20,9 @@ const campuses = {
       resourceId: "73",
       name: "Mensa Blechhammer",
     },
+    transit: {
+      target: "Schmalkalden, Fachhochschule",
+    },
   },
   Gera: {
     name: "Gera",
@@ -34,10 +38,14 @@ const campuses = {
       resourceId: "67",
       name: "Mensa Weg der Freundschaft",
     },
+    transit: {
+      target: "Gera, Weg der Freundschaft",
+    },
   },
 };
 
 export function getCampusContext(studyPlanSessions, selectedDate) {
+  // Für Tage ohne Eintrag bleibt Schmalkalden der sichere Standard-Campus.
   const location = studyPlanSessions.find((session) => session.dates.includes(selectedDate))?.location;
   return campuses[location] ?? campuses.Schmalkalden;
 }

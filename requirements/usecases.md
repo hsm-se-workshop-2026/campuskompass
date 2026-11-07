@@ -109,8 +109,9 @@ Hinweis angezeigt.
 **Vorbedingung:** Datum und Uhrzeit sind ausgewählt.
 
 1. Das Frontend formatiert Datum und Uhrzeit für VMT.
-2. Das Fahrplan-Widget und der externe Link werden aktualisiert.
-3. Der Student kann die Fahrplanauskunft öffnen.
+2. Das Frontend bestimmt das Fahrplanziel passend zum Studienort.
+3. Das Fahrplan-Widget und der externe Link werden aktualisiert.
+4. Der Student kann die Fahrplanauskunft öffnen.
 
 **User Story:** CAMPUS-05
 

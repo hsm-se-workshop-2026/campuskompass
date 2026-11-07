@@ -88,8 +88,9 @@ Der Mensa-Speiseplan wird über einen lokalen Python-Endpunkt geladen, damit
 der Browser die Anfrage des Studierendenwerks nicht wegen CORS blockiert.
 Python 3 ist bereits ausreichend; zusätzliche Pakete werden nicht benötigt.
 Die Datumsauswahl im Dashboard lädt den Speiseplan für den gewählten Tag und
-übernimmt Datum und Abfahrtszeit in das VMT-Fahrplan-Widget. Im Widget gibst du
-deinen Startort ein und wählst als Ziel „Schmalkalden, Fachhochschule“.
+übernimmt Datum und Abfahrtszeit in das VMT-Fahrplan-Widget. Das Ziel wird
+passend zum Studienort gesetzt; in Schmalkalden ist es „Schmalkalden,
+Fachhochschule“, bei Gera-Terminen „Gera, Weg der Freundschaft“.
 Die Google-Maps-Route im Abschnitt „Dein Weg zum Campus“ richtet ihr Ziel nach
 dem Studienplan: Bei Gera-Terminen führt sie zur DHGE Gera, sonst zur
 Hochschule Schmalkalden. Mit „Jetzt“ stellst du Datum und Uhrzeit auf die
@@ -159,6 +160,19 @@ Der Python-Server stellt die statischen Dateien bereit und fungiert beim
 Mensaplan als Proxy. Dadurch wird der externe Mensa-Endpunkt vom Browser aus
 nicht direkt wegen CORS angesprochen.
 
+### Fehlerbehandlung und parallele Anfragen
+
+Das Frontend validiert die Struktur von `study-plan.json`, bevor Termine
+verwendet werden. Fehlende Studienplandaten, nicht erreichbare externe Dienste
+und unvollständige Wetterantworten werden direkt in der jeweiligen Dashboard-Karte
+angezeigt und zusätzlich in der Browser-Konsole protokolliert.
+
+Bei Wetter- und Mensa-Anfragen wird eine laufende Anfrage über eine
+fortlaufende ID markiert. Antwortet eine ältere Anfrage erst nach einem
+Datumswechsel, wird sie verworfen. Dadurch bleiben die angezeigten Daten
+immer an die zuletzt ausgewählte Kombination aus Datum, Uhrzeit und Campus
+gebunden.
+
 ### Start
 
 ```powershell
@@ -190,6 +204,21 @@ Die Ressourcen-ID `67` steht für die Mensa in Gera, `73` für die Mensa
 Blechhammer in Schmalkalden. Ungültige IDs oder Datumswerte werden mit einem
 HTTP-Fehler beantwortet. Fehler beim externen Studierendenwerk werden als
 `502 Bad Gateway` gemeldet.
+
+### Prüfung nach Änderungen
+
+Die wichtigsten Dateien können ohne zusätzliche Abhängigkeiten geprüft werden:
+
+```powershell
+python -m py_compile .\server.py
+node --check .\js\app.js
+node --check .\js\campus-context.js
+Get-Content .\study-plan.json | ConvertFrom-Json | Out-Null
+```
+
+`node --check` prüft ausschließlich die JavaScript-Syntax. Die Funktion der
+externen Dienste hängt weiterhin von Netzwerkzugriff, deren aktueller
+Antwortstruktur und den jeweiligen Verfügbarkeiten ab.
 
 ## Verzeichnisübersicht
 
@@ -230,3 +259,8 @@ Die fachlichen Abläufe sind in
 Die Präsentation liegt als Marp-kompatible Markdown-Datei in
 [`praesentation.md`](./praesentation.md). Sie kann in Visual Studio Code mit
 der Marp-Erweiterung als Folienansicht oder PDF geöffnet werden.
+
+Die Präsentation behandelt verbindlich die fünf Themen **Ziel und Funktionen**,
+**Architektur**, **Modellierung**, **Bedienung und Weboberfläche** sowie
+**Tests und Erweiterbarkeit**. Das zugehörige Testkonzept steht in
+[`testkonzept.md`](./testkonzept.md).

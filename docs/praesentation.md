@@ -14,6 +14,37 @@ Vereinfachte Code- und Anforderungspräsentation
 
 ---
 
+## Präsentationsstruktur
+
+1. Ziel und Funktionen
+2. Architektur
+3. Modellierung
+4. Bedienung und Weboberfläche
+5. Tests und Erweiterbarkeit
+
+---
+
+## 1. Ziel und Funktionen
+
+### Ziel
+
+CampusKompass bündelt die wichtigsten Informationen für einen Studientag an
+den Standorten Schmalkalden und Gera in einer lokalen Weboberfläche. Die
+Anwendung reduziert den Wechsel zwischen mehreren externen Informationsquellen
+und ordnet die Daten dem ausgewählten Datum zu.
+
+### Funktionen
+
+- Studienplan nach Datum filtern und Termine mit Zeit, Veranstaltung,
+  Lehrkraft, Ort und Raum anzeigen
+- Mensaplan des passenden Campus über den lokalen Server laden
+- Wetter für Campus, Datum und Uhrzeit anzeigen
+- Campusabhängiges Ziel für Route und ÖPNV-Fahrplanauskunft setzen
+- Google-Maps-Route aus Startort oder Browserstandort öffnen
+- Auswahl mit „Jetzt“ auf die aktuelle Zeit in Deutschland zurücksetzen
+
+---
+
 ## Projekt auf einen Blick
 
 - **GPX-Visualizer**: Wanderungen aus GPX-Dateien auswerten
@@ -64,7 +95,9 @@ GeoPoint -> Route -> Statistikberechnung
 
 ---
 
-## CampusKompass: Architektur
+## 2. Architektur
+
+### Systemarchitektur
 
 ```text
 Browser
@@ -95,7 +128,7 @@ direkt wegen CORS ansprechen muss.
 
 ---
 
-## Modellierung: Klassendiagramm Backend
+## 3. Modellierung: Klassendiagramm Backend
 
 Das Backend besteht aus dem Modul `server.py` und dem spezialisierten Handler
 `DashboardHandler`:
@@ -157,6 +190,66 @@ läuft. Wetter, Karten, Fahrplan und Studienplandaten werden vom Frontend
 verarbeitet.
 
 Quelle: [`modellierung/paketdiagramm.puml`](../modellierung/paketdiagramm.puml)
+
+---
+
+## 4. Bedienung und Weboberfläche
+
+### Bedienablauf
+
+1. `python .\server.py` starten und `http://127.0.0.1:8000/` öffnen.
+2. Datum und Abfahrtszeit im Bereich „Tagesplanung“ auswählen.
+3. Studienplan, Mensa und Wetter für die Auswahl prüfen.
+4. Im Fahrplan-Widget Startort und das angezeigte Campusziel verwenden.
+5. Für eine Autofahrt Startpunkt eingeben oder den Standort freigeben.
+6. Mit „Jetzt“ jederzeit zur aktuellen Zeit zurückkehren.
+
+### Oberfläche
+
+- Kopfbereich mit Hochschullinks und aktuellem Datum/Uhrzeit
+- Tagesplanung als zentrale Eingabe für Datum und Zeit
+- Karten für Wetter, Mensa, Studienplan, Fahrplan und Route
+- Statusmeldungen bei Lade-, Netzwerk- oder Datenfehlern
+- Responsive Darstellung für Desktop und mobile Bildschirmbreiten
+- Externe Inhalte werden über Links oder eingebettete Widgets geöffnet
+
+Die Oberfläche verwendet semantische HTML-Elemente, sichtbare Fokuszustände,
+beschriftete Formularelemente und `aria-live`-Bereiche für dynamische Status-
+und Ergebnisanzeigen.
+
+---
+
+## 5. Tests und Erweiterbarkeit
+
+### Durchgeführte Prüfungen
+
+- Python-Syntaxprüfung mit `python -m py_compile .\server.py`
+- JavaScript-Syntaxprüfung mit `node --check`
+- JSON-Validierung von `study-plan.json`
+- HTTP-Smoke-Test des lokalen Servers
+- Prüfung ungültiger Mensa-IDs mit erwarteter HTTP-400-Antwort
+- VS-Code-Diagnose ohne gemeldete Fehler oder Warnungen
+- Manuelle Prüfung von Datumswechsel, Campuswechsel, Wetterfehlern und
+  Standortfreigabe
+
+Die externen Dienste bleiben abhängig von Netzwerk, Verfügbarkeit und ihrer
+aktuellen Antwortstruktur. Das Testkonzept ist in
+[`testkonzept.md`](./testkonzept.md) dokumentiert.
+
+### Erweiterbarkeit
+
+- Neue Standorte werden zentral in `js/campus-context.js` ergänzt.
+- Neue Termine werden ausschließlich in `study-plan.json` gepflegt.
+- Weitere Datenquellen können als eigene Lade- und Renderfunktionen ergänzt
+  werden.
+- Der Mensa-Proxy kann um zusätzliche, whitelisted Ressourcen erweitert werden.
+- Die Frontend-Funktionen können später in klar getrennte Module oder
+  Komponenten überführt werden.
+- Automatisierte Browser- und API-Tests können auf dem vorhandenen Testkonzept
+  aufbauen.
+
+Die Trennung von Daten, Campuszuordnung, Oberfläche und Proxy reduziert dabei
+die Auswirkungen zukünftiger Änderungen.
 
 ---
 

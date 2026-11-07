@@ -6,7 +6,10 @@
         V: "Vegetarisch",
         mr: "mensaRegional",
       };
+      // Zähler verhindern, dass verspätete Antworten einen neueren Stand
+      // (z. B. nach einem schnellen Datumswechsel) wieder überschreiben.
       let weatherRequestId = 0;
+      let menuRequestId = 0;
       let studyPlanSessions = [];
       let studyPlanLoadError = null;
       let lastRouteOrigin = "";
@@ -107,22 +110,29 @@
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           const sessions = await response.json();
           if (!Array.isArray(sessions) || sessions.some((session) =>
-            !Array.isArray(session.dates) || !session.time || !session.title || !session.lecturer || !session.room
+            !Array.isArray(session.dates) ||
+            session.dates.some((sessionDate) => typeof sessionDate !== "string") ||
+            !session.time ||
+            !session.title ||
+            !session.lecturer ||
+            !session.location ||
+            !session.room
           )) {
             throw new Error("Die Studienplandaten haben ein ungültiges Format.");
           }
           studyPlanSessions = sessions;
           renderStudyPlan(getSelectedDate());
           updateRouteDestination();
-          loadWeather();
-          loadMenu();
+          updateTransitDestination();
         } catch (error) {
           studyPlanLoadError = error.message || "Unbekannter Fehler";
           status.classList.add("error");
           status.textContent = `Der Studienplan konnte nicht geladen werden: ${studyPlanLoadError}`;
           console.error("Studienplan konnte nicht geladen werden:", error);
         }
-        await loadMenu();
+
+        // Erst nach dem Studienplan laden, damit der Campus korrekt ermittelt wird.
+        await Promise.all([loadMenu(), loadWeather()]);
       }
 
       function updateMenuDate(selectedDate) {
@@ -163,6 +173,13 @@
         plannerLink.searchParams.set("date", hafasDate);
         plannerLink.searchParams.set("time", hafasTime);
         document.querySelector("#train-planner-link").href = plannerLink.toString();
+      }
+
+      function updateTransitDestination() {
+        const transit = getCampusContext(studyPlanSessions, getSelectedDate()).transit;
+        document.querySelector("#train-destination").textContent = transit.target;
+        document.querySelector("#train-planner").title =
+          `VMT Fahrplanauskunft zu ${transit.target}`;
       }
 
       async function loadWeather() {
@@ -226,6 +243,18 @@
           if (hourlyIndex < 0 || data.hourly.temperature_2m[hourlyIndex] == null) {
             throw new Error("Für diese Uhrzeit sind keine Wetterdaten verfügbar.");
           }
+          if (
+            data.hourly.apparent_temperature?.[hourlyIndex] == null ||
+            data.hourly.wind_speed_10m?.[hourlyIndex] == null ||
+            data.daily.temperature_2m_min?.[0] == null ||
+            data.daily.temperature_2m_max?.[0] == null ||
+            (isHistorical
+              ? data.daily.precipitation_sum?.[0] == null
+              : data.daily.precipitation_probability_max?.[0] == null)
+          ) {
+            throw new Error("Die Wetterdaten sind für diesen Zeitraum unvollständig.");
+          }
+          if (requestId !== weatherRequestId) return;
 
           const weatherCode = data.hourly.weather_code[hourlyIndex] ?? data.daily.weather_code[0];
           const weather = weatherDescriptions[weatherCode] ?? ["Wetterlage nicht verfügbar", "🌡️"];
@@ -260,6 +289,7 @@
         const status = document.querySelector("#menu-status");
         const list = document.querySelector("#meal-list");
         const refresh = document.querySelector("#menu-refresh");
+        const requestId = ++menuRequestId;
         const selectedDate = getSelectedDate();
         const mensa = getCampusContext(studyPlanSessions, selectedDate).mensa;
         updateMenuDate(selectedDate);
@@ -278,6 +308,7 @@
           if (!response.ok) throw new Error(`Speiseplan antwortet mit HTTP ${response.status}`);
 
           const html = await response.text();
+          if (requestId !== menuRequestId) return;
           const menuDocument = new DOMParser().parseFromString(html, "text/html");
           const rows = [...menuDocument.querySelectorAll(".rowMeal")];
           const meals = rows.flatMap((row) => {
@@ -340,6 +371,7 @@
 
           status.textContent = `${meals.length} ${meals.length === 1 ? "Gericht" : "Gerichte"} in ${mensa.name} · direkt vom Studierendenwerk Thüringen`;
         } catch (error) {
+          if (requestId !== menuRequestId) return;
           const message = document.createElement("div");
           message.className = "menu-empty";
           message.textContent = error.message || "Der Speiseplan konnte nicht geladen werden.";
@@ -348,7 +380,7 @@
           status.classList.add("error");
           console.error("Speiseplan konnte nicht geladen werden:", error);
         } finally {
-          refresh.disabled = false;
+          if (requestId === menuRequestId) refresh.disabled = false;
         }
       }
 
@@ -477,6 +509,7 @@
         updatePlanDate();
         renderStudyPlan(selectedDateInput.value);
         updateRouteDestination();
+        updateTransitDestination();
         loadMenu();
         loadWeather();
       };
@@ -501,6 +534,7 @@
         updateStudyPlanDate(selectedDate);
         updatePlanDate();
         updateRouteDestination();
+        updateTransitDestination();
         loadMenu();
         loadWeather();
         renderStudyPlan(selectedDate);
@@ -514,6 +548,6 @@
       document.querySelector("#reset-to-now").addEventListener("click", updateSelectionToNow);
       updateClock();
       updatePlanDate();
+      updateTransitDestination();
       loadStudyPlan();
       window.setInterval(updateClock, 30000);
-      loadWeather();
