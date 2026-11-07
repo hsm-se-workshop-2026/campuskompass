@@ -60,12 +60,28 @@
             <button class="button secondary" id="weather-refresh" type="button" aria-label="Wetter aktualisieren">↻&nbsp; Aktualisieren</button>
           </div>
           <div class="weather-main" aria-live="polite">
-            <div>
+            <div class="weather-overview">
               <p class="weather-location" id="weather-location">📍 Hochschule Schmalkalden</p>
               <div class="temperature"><span id="temperature">--</span><sup>°C</sup></div>
               <p class="weather-description" id="weather-description">Wetterdaten werden geladen …</p>
+              <div class="weather-illustration" id="weather-icon" aria-hidden="true">⛅</div>
             </div>
-            <div class="weather-illustration" id="weather-icon" aria-hidden="true">⛅</div>
+            <figure class="weather-webcam">
+              <div class="weather-webcam-frame">
+                <img
+                  class="webcam-image"
+                  id="webcam-image"
+                  src="https://webcam.antenne-schmalkalden.de/Grasberg.jpg"
+                  alt="Aktuelles Webcam-Bild vom Grasberg in Schmalkalden"
+                  width="1024"
+                  height="768">
+                <button class="webcam-refresh" id="webcam-refresh" type="button" aria-label="Webcam-Bild aktualisieren" title="Webcam-Bild aktualisieren">↻</button>
+              </div>
+              <figcaption class="webcam-caption">
+                <span id="webcam-status" aria-live="polite">Webcam-Bild wird geladen …</span>
+                <a href="https://webcam.antenne-schmalkalden.de/Grasberg.jpg" target="_blank" rel="noreferrer">Grasberg · Quelle ↗</a>
+              </figcaption>
+            </figure>
           </div>
           <div class="weather-stats">
             <div class="stat"><span>Gefühlt</span><strong id="feels-like">--</strong></div>
@@ -95,29 +111,6 @@
             <div class="menu-footer">
               <span class="status">Änderungen vor Ort sind möglich.</span>
               <a class="text-link" href="https://www.stw-thueringen.de/mensen/" target="_blank" rel="noreferrer">Quelle: Studierendenwerk Thüringen&nbsp; ↗</a>
-            </div>
-          </div>
-        </section>
-
-        <section class="card webcam-card" aria-labelledby="webcam-title">
-          <div class="card-heading">
-            <div>
-              <h2 id="webcam-title">Schmalkalden live</h2>
-              <p>Webcam Grasberg · aktualisiert jede Minute</p>
-            </div>
-            <button class="button secondary" id="webcam-refresh" type="button">↻&nbsp; Aktualisieren</button>
-          </div>
-          <div class="webcam-content">
-            <img
-              class="webcam-image"
-              id="webcam-image"
-              src="https://webcam.antenne-schmalkalden.de/Grasberg.jpg"
-              alt="Aktuelles Webcam-Bild vom Grasberg in Schmalkalden"
-              width="1024"
-              height="768">
-            <div class="webcam-footer">
-              <span id="webcam-status" aria-live="polite">Webcam-Bild wird geladen …</span>
-              <a href="https://webcam.antenne-schmalkalden.de/Grasberg.jpg" target="_blank" rel="noreferrer">Quelle ↗</a>
             </div>
           </div>
         </section>

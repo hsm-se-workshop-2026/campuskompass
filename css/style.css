@@ -176,12 +176,21 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 190px;
-        padding: 22px 28px;
+        gap: 24px;
+        min-height: 220px;
+        padding: 20px 28px;
         background:
           radial-gradient(ellipse at 79% 15%, rgb(255 255 255 / 27%) 0 20%, transparent 21%),
           linear-gradient(120deg, #00305e, #28628b);
         color: white;
+      }
+
+      .weather-overview {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
       }
 
       .weather-location {
@@ -202,7 +211,31 @@
 
       .temperature sup { padding-top: 5px; font-size: 23px; letter-spacing: 0; }
       .weather-description { margin: 10px 0 0; font-size: 14px; }
-      .weather-illustration { font-size: 88px; filter: drop-shadow(0 10px 14px rgb(0 25 52 / 18%)); }
+      .weather-illustration { grid-column: 2; grid-row: 1 / span 3; font-size: 72px; filter: drop-shadow(0 10px 14px rgb(0 25 52 / 18%)); }
+
+      .weather-webcam { flex: 0 1 38%; max-width: 320px; min-width: 0; margin: 0; }
+      .weather-webcam-frame { position: relative; overflow: hidden; border: 1px solid rgb(255 255 255 / 45%); border-radius: 12px; background: rgb(0 20 40 / 28%); box-shadow: 0 8px 20px rgb(0 20 40 / 20%); }
+      .webcam-image { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+      .webcam-refresh {
+        position: absolute;
+        top: 9px;
+        right: 9px;
+        display: grid;
+        width: 34px;
+        min-height: 34px;
+        padding: 0;
+        place-items: center;
+        border: 1px solid rgb(255 255 255 / 75%);
+        border-radius: 50%;
+        background: rgb(0 35 66 / 78%);
+        color: #fff;
+        cursor: pointer;
+        font-size: 18px;
+      }
+      .webcam-refresh:hover { background: rgb(0 35 66 / 96%); }
+      .webcam-caption { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; color: rgb(255 255 255 / 82%); font-size: 10px; line-height: 1.35; }
+      .webcam-caption a { color: white; font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .webcam-caption a:hover { text-decoration: underline; }
 
       .weather-stats {
         display: grid;
@@ -216,27 +249,6 @@
       .stat span { display: block; color: var(--muted); font-size: 11px; }
       .stat strong { display: block; margin-top: 7px; font-size: 14px; }
       .data-note { margin: 0 24px 18px; color: var(--muted); font-size: 11px; }
-
-      .webcam-content { padding: 0 24px 18px; }
-      .webcam-image {
-        display: block;
-        width: min(100%, 360px);
-        aspect-ratio: 4 / 3;
-        margin: 0 auto;
-        border-radius: 10px;
-        background: var(--brand-soft);
-        object-fit: cover;
-      }
-      .webcam-footer {
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        margin-top: 12px;
-        color: var(--muted);
-        font-size: 11px;
-      }
-      .webcam-footer a { color: var(--brand); font-weight: 700; text-decoration: none; }
-      .webcam-footer a:hover { text-decoration: underline; }
 
       .status { color: var(--muted); font-size: 12px; }
       .status.error { color: var(--brand-dark); }
@@ -380,8 +392,11 @@
         main { width: calc(100% - 32px); padding-top: 30px; }
         .welcome { display: block; }
         .date-block { margin-top: 18px; text-align: left; }
-        .weather-main { min-height: 165px; padding: 20px; }
-        .weather-illustration { font-size: 66px; }
+        .weather-main { align-items: stretch; flex-direction: column; gap: 18px; padding: 20px; }
+        .weather-overview { grid-template-columns: minmax(0, 1fr) auto; }
+        .weather-illustration { font-size: 54px; }
+        .weather-webcam { flex-basis: auto; max-width: none; }
+        .webcam-image { max-height: 220px; }
         .weather-stats { grid-template-columns: repeat(2, 1fr); gap: 16px 0; }
         .stat:nth-child(2) { border-right: 0; }
         .stat:nth-child(3) { padding-left: 4px; }
@@ -389,7 +404,6 @@
         .card-heading:has(.menu-refresh) { align-items: flex-start; }
         .card-heading { padding-right: 18px; padding-left: 18px; }
         .menu-content, .route-controls { padding-right: 18px; padding-left: 18px; }
-        .webcam-content { padding-right: 18px; padding-left: 18px; }
         .study-downloads { align-items: flex-end; flex-direction: column; gap: 8px; }
         .day-planner { gap: 10px; padding: 16px; }
         .planner-field { flex: 1; min-width: 130px; }
