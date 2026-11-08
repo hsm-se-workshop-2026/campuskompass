@@ -256,6 +256,12 @@ Die Präsentation liegt als Marp-kompatible Markdown-Datei in
 [`praesentation.md`](./praesentation.md). Sie kann in Visual Studio Code mit
 der Marp-Erweiterung als Folienansicht oder PDF geöffnet werden.
 
+Eine ergänzte, an den aktuellen Stand angepasste Fassung ist ebenfalls
+verfügbar: [`praesentation-erweitert.md`](./praesentation-erweitert.md),
+[PDF-Export](./praesentation-erweitert.pdf) und
+[PowerPoint-Export](./praesentation-erweitert.pptx). Sie bindet das
+[Architekturbild](../assets/vereinfachte-architektur.png) ein.
+
 Die Präsentation behandelt verbindlich die fünf Themen **Ziel und Funktionen**,
 **User Stories und Use Cases**, **MoSCoW-Analyse**, **Architektur** sowie
 **Bedienung und Weboberfläche**. Das zugehörige Testkonzept steht in
